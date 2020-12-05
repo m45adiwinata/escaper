@@ -61,7 +61,7 @@ class LookbookController extends AdminController
     {
         $form = new Form(new Lookbook());
 
-        $form->multipleImage('image', __('Image'))->move('images/background/lookbook')->removable();
+        $form->image('image', __('Image'))->move('images/lookbook')->removable();
 
         return $form;
     }
