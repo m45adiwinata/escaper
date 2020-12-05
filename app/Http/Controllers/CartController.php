@@ -147,7 +147,7 @@ class CartController extends Controller
         $data = Checkout::find($request->id);
         $file = $request->file('file');
         $namafile = time().$file->getClientOriginalName();
-        $data->buktitrf = $namafile;
+        $data->buktitrf = 'images/userupload/'.$namafile;
         $data->save();
         $file->move('images/userupload', $namafile);
         $temp = array(
@@ -157,7 +157,7 @@ class CartController extends Controller
             'guest_code' => $data->guest_code,
             'currency' => $data->currency,
             'grand_total' => $data->grand_total,
-            'image' => $data->buktitrf,
+            'image' => env('APP_URL').'/'.$data->buktitrf,
             'id' => $request->id
         );
         Mail::send('emailtransfer', $temp, function($message) use ($temp) {
