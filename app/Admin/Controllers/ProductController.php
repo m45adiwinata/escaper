@@ -78,7 +78,7 @@ class ProductController extends AdminController
         $temp = explode('/', $_SERVER['SCRIPT_URI']);
         if ($temp[count($temp) - 1] == "edit")
         {
-            $id = intval(explode('/', $_SERVER['SCRIPT_URI'])[3]);
+            $id = intval($temp[count($temp) - 2]);
         }
         else {
             $id = ProductId::orderBy('created_at', 'desc')->first()->last_id;
