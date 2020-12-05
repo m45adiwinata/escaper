@@ -14,10 +14,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    if (!isset($_COOKIE['guest_code'])) {
-        return view('currency');
-    }
-    return redirect('/home');
+    // if (!isset($_COOKIE['guest_code'])) {
+    //     return view('currency');
+    // }
+    // return redirect('/home');
+    return view('currency');
 });
 
 Route::get('/home', 'homeController@index');

@@ -14,18 +14,14 @@
         <tr>
             <td><img src="{{$message->embed($cart['image'])}}" alt="{{$cart['name']}}" style="width:240px; height:320px;">{{$cart['name']}}</td>
             <td>{{$cart['qty']}}</td>
-            <td>{{$cart['price']}}</td>
-            <td style="align:right;">{{$cart['subtotal']}}</td>
+            <td>{{$currency == 'IDR' ? 'Rp' : '$'}} {{$cart['price']}}</td>
+            <td style="align:right;">{{$currency == 'IDR' ? 'Rp' : '$'}} {{$cart['subtotal']}}</td>
         </tr>
     @endforeach
         <tr>
             <td colspan="3">GRAND TOTAL</td>
             <td>
-                @if($currency == 'IDR')
-                Rp {{number_format($grand_total, 2, ',', '.')}}
-                @else
-                {{number_format($grand_total, 2, ',', '.')}} $
-                @endif
+                {{$currency == 'IDR' ? 'Rp' : '$'}} {{number_format($grand_total, 2, ',', '.')}}
             </td>
         </tr>
     </tbody>
