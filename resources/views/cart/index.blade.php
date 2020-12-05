@@ -10,7 +10,7 @@
             <div class="col-sm-3">
                 {{$cart->product()->first()->name}}
                 <br>
-                <img src="images/{{$cart->product()->first()->image[0]}}" alt="Image" class="img-fluid" style="width:125px; height:125px;">
+                <img src="{{$cart->product()->first()->image[0]}}" alt="Image" class="img-fluid" style="width:125px; height:125px;">
             </div>
             <div class="col-sm-4">
                 @if ($_COOKIE['currency'] == 'IDR')
