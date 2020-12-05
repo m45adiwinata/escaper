@@ -30,6 +30,9 @@ class homeController extends Controller
                 $data->delete();
             }
         }
+        if (!isset($_COOKIE['guest_code'])) {
+            return redirect('/');
+        }
         return view('homepage');
     }
 

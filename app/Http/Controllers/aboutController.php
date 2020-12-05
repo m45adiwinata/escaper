@@ -18,6 +18,9 @@ class aboutController extends Controller
      */
     public function index()
     {
+        if (!isset($_COOKIE['guest_code'])) {
+            return redirect('/');
+        }
         $data['about'] = ViewAbout::where('status', '1')->orderBy('created_at')->first();
         // dd(url('images/'.$data['about']->background));
         return view('about', $data);

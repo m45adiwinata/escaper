@@ -21,6 +21,9 @@ class contactController extends Controller
      */
     public function index()
     {
+        if (!isset($_COOKIE['guest_code'])) {
+            return redirect('/');
+        }
         $data['contact'] = ViewContact::where('status', 1)->orderBy('updated_at')->first();
 
         return view('contact', $data);
@@ -30,7 +33,7 @@ class contactController extends Controller
     {
         // Mail::to("m45adiwinata@gmail.com")->send(new EscaperEmail());
         // return "Email telah dikirim";
-
+        
         $data = Checkout::first();
         return view('emailku', $data);
     }

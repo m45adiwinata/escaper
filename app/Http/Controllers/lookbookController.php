@@ -18,6 +18,9 @@ class lookbookController extends Controller
      */
     public function index()
     {
+        if (!isset($_COOKIE['guest_code'])) {
+            return redirect('/');
+        }
         $data['lookbook'] = Lookbook::get();
         return view('lookbook', $data);
     }
