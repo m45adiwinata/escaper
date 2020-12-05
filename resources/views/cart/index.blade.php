@@ -47,12 +47,13 @@
                                 <input type="number" placeholder="First name" value="{{$cart->amount}}" id="qty-{{$cart->id}}" min="1" max="{{$cart->avl->stocks}}" onchange="changeQty({{$cart->id}})" required>
                             </td>
                             <td class="align-middle">
+                                {{$_COOKIE['currency'] == 'IDR' ? 'Rp ': '$ '}}
                                 @if ($_COOKIE['currency'] == 'IDR')
                                 @php $total = $cart->avl->IDR * $cart->amount; $subtotal += $total; @endphp
-                                Rp <span id="total-{{$cart->id}}">{{number_format($total, 0, ',', '.')}}</span>
+                                <span id="total-{{$cart->id}}">{{number_format($total, 0, ',', '.')}}</span>
                                 @else
                                 @php $total = $cart->avl->USD * $cart->amount; $subtotal += $total; @endphp
-                                <span id="total-{{$cart->id}}">{{number_format($total, 0, ',', '.')}}</span> $
+                                <span id="total-{{$cart->id}}">{{number_format($total, 0, ',', '.')}}</span>
                                 @endif
                                 
                             </td>
