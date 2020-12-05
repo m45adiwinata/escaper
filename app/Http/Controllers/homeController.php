@@ -58,7 +58,7 @@ class homeController extends Controller
             setcookie("currency", $request->currency, time() + 86400);
         }
         else if ($_COOKIE['currency'] != $request->currency) {
-            $_COOKIE['currency'] = $request->currency;
+            setcookie('currency', $request->currency);
         }
 
         return redirect('home');
