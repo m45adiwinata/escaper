@@ -3,53 +3,105 @@
 @section('content')
 @include('components.header2')
 <div class="product">
-    <div class="container">
-        @php $grandtotal = 0; @endphp
-        @foreach($carts as $cart)
-        <div class="row" id="cart-row-{{$cart->id}}">
-            <div class="col-sm-3">
-                {{$cart->product()->first()->name}}
-                <br>
-                <img src="{{$cart->product()->first()->image[0]}}" alt="Image" class="img-fluid" style="width:125px; height:125px;">
+    <div class="container" id="cart-container">
+        @php $grandtotal = 0; $subtotal = 0; @endphp
+        <div class="row">
+            <div class="col-md-12">
+                <table class="tbl">
+                    <tr>
+                        <td><a href="/cart">SHOPPING CART</a></td>
+                        <td>></td>
+                        <td><a href="/cart/checkout">CHECKOUT DETAILS</td>
+                        <td>></td>
+                        <td>ORDER COMPLETE</td>
+                    </tr>
+                </table>
             </div>
-            <div class="col-sm-4">
-                @if ($_COOKIE['currency'] == 'IDR')
-                Rp {{number_format($cart->avl->IDR, 2, ',', '.')}}
-                @else
-                {{number_format($cart->avl->USD, 2, ',', '.')}} $
-                @endif
-                <div class="form-row">
-                    <div class="col-md-3 mb-3">
-                        <input type="number" class="form-control" placeholder="First name" value="{{$cart->amount}}" id="qty-{{$cart->id}}" onchange="changeQty({{$cart->id}})" required>
+            <div class="col-md-8">
+                <table class="table table-borderless">
+                    <thead class="border-bottom">
+                        <tr>
+                            <td class="font-weight-bold" style="width:40%;">PRODUCT</td>
+                            <td class="font-weight-bold" style="width:20%;">PRICE</td>
+                            <td class="font-weight-bold" style="width:20%;">QUANTITY</td>
+                            <td class="font-weight-bold" style="width:20%;">SUBTOTAL</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($carts as $cart)
+                        <tr id="cart-row-{{$cart->id}}">
+                            <td>
+                                <button class="tombol-delete-cart" id="btn-delete-{{$cart->id}}" onclick="deleteCartItem({{$cart->id}})">x</button>
+                                <img src="{{$cart->product()->first()->image[0]}}" alt="Image" class="img-fluid" style="width:75px; height:75px;">
+                                <a class="hitam-ke-orange" href="product?productid={{$cart->product()->first()->id}}">{{$cart->product()->first()->name}} - {{$cart->avl->size_init}}</a>
+                            </td>
+                            <td class="align-middle">
+                                {{$_COOKIE['currency'] == 'IDR' ? 'Rp ': '$ '}}{{number_format($cart->avl->IDR, 0, ',', '.')}}
+                            </td>
+                            <td class="align-middle">
+                                <input type="number" placeholder="First name" value="{{$cart->amount}}" id="qty-{{$cart->id}}" min="1" max="{{$cart->avl->stocks}}" onchange="changeQty({{$cart->id}})" required>
+                            </td>
+                            <td class="align-middle">
+                                @if ($_COOKIE['currency'] == 'IDR')
+                                @php $total = $cart->avl->IDR * $cart->amount; $subtotal += $total; @endphp
+                                Rp <span id="total-{{$cart->id}}">{{number_format($total, 0, ',', '.')}}</span>
+                                @else
+                                @php $total = $cart->avl->USD * $cart->amount; $subtotal += $total; @endphp
+                                <span id="total-{{$cart->id}}">{{number_format($total, 0, ',', '.')}}</span> $
+                                @endif
+                                
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-4 border-left border-right">
+                <table class="table table-borderless">
+                    <thead class="border-bottom">
+                        <tr>
+                            <td class="font-weight-bold">CART TOTALS</td>
+                        </tr>
+                    </thead>
+                </table>
+                <div class="row">
+                    <div class="col-md-6 text-left">
+                        <span>Subtotal</span>
                     </div>
-                    <div class="col-md mb-3">
-                        <input type="range" class="custom-range" min="1" max="{{$cart->avl->stocks}}" step="1" id="range-qty-{{$cart->id}}"  onchange="changeRangeQty({{$cart->id}})" value="{{$cart->amount}}">
+                    <div class="col-md-6 text-right">
+                        <b id="subtotal">
+                            {{$_COOKIE['currency'] == 'IDR' ? 'Rp ' : '$ '}}
+                            @if($_COOKIE['currency'] == 'IDR')
+                            {{number_format($subtotal,0,',','.')}}
+                            @else
+                            {{number_format($subtotal,2,',','.')}}
+                            @endif
+                        </b>
+                    </div>
+                </div>
+                @php $grandtotal = $subtotal; @endphp
+                <div class="row">
+                    <div class="col-md-6 text-left">
+                        <span>Total</span>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <b id="grandtotal">
+                            {{$_COOKIE['currency'] == 'IDR' ? 'Rp ' : '$ '}}
+                            @if($_COOKIE['currency'] == 'IDR')
+                            {{number_format($grandtotal,0,',','.')}}
+                            @else
+                            {{number_format($grandtotal,2,',','.')}}
+                            @endif
+                        </b>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <a href="/cart/checkout" class="btn w-100" style="background:black; color:white;">PROCEED TO CHECKOUT</a>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-3">
-                <h5>
-                    @if ($_COOKIE['currency'] == 'IDR')
-                    @php $total = $cart->avl->IDR * $cart->amount; $grandtotal += $total; @endphp
-                    Rp <span id="total-{{$cart->id}}">{{number_format($total, 2, ',', '.')}}</span>
-                    @else
-                    @php $total = $cart->avl->USD * $cart->amount; $grandtotal += $total; @endphp
-                    <span id="total-{{$cart->id}}">{{number_format($total, 2, ',', '.')}}</span> $
-                    @endif
-                </h5>
-            </div>
-            <div class="col-sm-2">
-                <button class="btn btn-danger" id="btn-delete-{{$cart->id}}" onclick="deleteCartItem({{$cart->id}})">x</button>
-            </div>
-        </div>
-        @endforeach
-        <div class="row" id="cart-row-grandtotal">
-            <div class="col-sm-3"></div>
-            <div class="col-sm-4"></div>
-            <div class="col-sm-3">
-                <h5 id="grandtotal">{{($_COOKIE['currency'] == 'IDR') ? 'Rp ' : ''}}{{number_format($grandtotal, 2, ',', '.')}}{{($_COOKIE['currency'] == 'USD') ? ' $ ' : ''}}<h5>
-            </div>
-            <div class="col-sm-2"><a href="/cart/checkout" class="btn btn-success">CHECKOUT</a></div>
         </div>
     </div>
 </div>
@@ -58,20 +110,11 @@
 @section('script')
 <script>
     function changeQty(id) {
-        $('#range-qty-'+id).val($('#qty-'+id).val());
         $.get('/cart/change-amount?cart_id=' + id +'&qty=' + $('#qty-'+id).val(), function(total) {
             $('#total-'+id).html(total);
         });
         $.get('/cart/get-grand-total', function(grandtotal) {
-            $('#grandtotal').html(grandtotal);
-        });
-    }
-    function changeRangeQty(id) {
-        $('#qty-'+id).val($('#range-qty-'+id).val());
-        $.get('/cart/change-amount?cart_id=' + id +'&qty=' + $('#qty-'+id).val(), function(total) {
-            $('#total-'+id).html(total);
-        });
-        $.get('/cart/get-grand-total', function(grandtotal) {
+            $('#subtotal').html(grandtotal);
             $('#grandtotal').html(grandtotal);
         });
     }
@@ -102,7 +145,7 @@
         });
     }
     $(document).ready(function() {
-        
+        $("input[type='number']").inputSpinner();
     });
 </script>
 @endsection

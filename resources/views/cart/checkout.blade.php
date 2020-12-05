@@ -14,7 +14,7 @@
             </tr>
         </table>
         <div class="message-container container medium-text-center">
-            Returning customer? <a href="#" class="showlogin" id="showlogin">Click here to login</a>
+            Returning customer? <a href="#" class="showlogin hitam-ke-orange" id="showlogin">Click here to login</a>
             <div id="login" style="display:none;">
                 <form action="" method="POST">
                     @csrf
@@ -44,7 +44,7 @@
         </div>
         <br>
         <div>
-            Have a coupon? <a href="#" class="showlogin" id="showcoupon">Click here to enter your code</a>
+            Have a coupon? <a href="#" class="showlogin hitam-ke-orange" id="showcoupon">Click here to enter your code</a>
             <div id="coupon" style="display:none;">
                 <form action="" method="POST">
                     @csrf
@@ -129,81 +129,83 @@
                         </div>
                     </div>
                     <div class="col-sm-6">
-                        <h4>YOUR ORDER</h4>
-                        <table class="table">
-                            <tr>
-                                <th class="text-left">PRODUCT</th>
-                                <th class="text-right">SUBTOTAL</th>
-                            </tr>
-                            @php $subtotal = 0; @endphp
-                            @foreach($carts as $cart)
-                            <tr>
-                                <td class="text-left">{{$cart->product()->first()->name}} <b>x {{$cart->amount}}</b></td>
-                                <td class="text-right">
-                                    <b>
-                                        @php $subtotal+= $cart->total; @endphp
-                                        {{($_COOKIE['currency'] == 'IDR') ? 'Rp ' : '$'}}
-                                        {{number_format($cart->total, 2, ',', '.')}}
-                                    </b>
-                                </td>
-                            </tr>
-                            @endforeach
-                            <tr>
-                                <td class="text-left"><b>Subtotal</b></td>
-                                <td class="text-right">
-                                    <b>
-                                        {{($_COOKIE['currency'] == 'IDR') ? 'Rp ' : '$'}}
-                                        {{number_format($subtotal, 2, ',', '.')}}
-                                    </b>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-left"><b>Shipping</b></td>
-                                <td class="text-right">
-                                    <b>
-                                        @php $shipping = 0; @endphp
-                                        Free shipping.
-                                    </b>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-left"><b>Total</b></td>
-                                <td class="text-right">
-                                    <b>
-                                        @php $grandtotal = $subtotal + $shipping; @endphp
-                                        {{($_COOKIE['currency'] == 'IDR') ? 'Rp ' : '$'}} {{number_format($grandtotal, 2, ',', '.')}}
-                                    </b>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="radTrfBank" id="radTrfBank" value="option1" checked>
-                                        <label class="form-check-label" for="radTrfBank">
-                                            <b>Transfer BCA 6115373947 a/n I Made Bayu Dharma Wibawa</b>
-                                        </label>
-                                        <br>
-                                        Make your payment directly into our bank account. 
-                                        Please use your Order ID as the payment reference to escaper@gmail.com. 
-                                        Your order will not be shipped until the funds have cleared in our account.
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="radPayPal" id="radPayPal" value="option2">
-                                        <label class="form-check-label" for="radPayPal">
-                                            <b>PayPal</b>
-                                            <img src="{{asset('images/paypal icon.png')}}" alt="PayPal Icon" style="width:84px;height:37px;">
-                                        </label>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><button type="submit" class="btn btn-primary">PLACE ORDER</button></td>
-                            </tr>
-                        </table>
+                        <div style="font-size:14px; border: 3px solid black; padding:15px;">
+                            <h4>YOUR ORDER</h4>
+                            <table class="table">
+                                <tr>
+                                    <th class="text-left">PRODUCT</th>
+                                    <th class="text-right">SUBTOTAL</th>
+                                </tr>
+                                @php $subtotal = 0; @endphp
+                                @foreach($carts as $cart)
+                                <tr>
+                                    <td class="text-left">{{$cart->product()->first()->name}} <b>x {{$cart->amount}}</b></td>
+                                    <td class="text-right">
+                                        <b>
+                                            @php $subtotal+= $cart->total; @endphp
+                                            {{($_COOKIE['currency'] == 'IDR') ? 'Rp ' : '$'}}
+                                            {{number_format($cart->total, 2, ',', '.')}}
+                                        </b>
+                                    </td>
+                                </tr>
+                                @endforeach
+                                <tr>
+                                    <td class="text-left"><b>Subtotal</b></td>
+                                    <td class="text-right">
+                                        <b>
+                                            {{($_COOKIE['currency'] == 'IDR') ? 'Rp ' : '$'}}
+                                            {{number_format($subtotal, 2, ',', '.')}}
+                                        </b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left"><b>Shipping</b></td>
+                                    <td class="text-right">
+                                        <b>
+                                            @php $shipping = 0; @endphp
+                                            Free shipping.
+                                        </b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left"><b>Total</b></td>
+                                    <td class="text-right">
+                                        <b>
+                                            @php $grandtotal = $subtotal + $shipping; @endphp
+                                            {{($_COOKIE['currency'] == 'IDR') ? 'Rp ' : '$'}} {{number_format($grandtotal, 2, ',', '.')}}
+                                        </b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="radTrfBank" id="radTrfBank" value="option1" checked>
+                                            <label class="form-check-label" for="radTrfBank">
+                                                <b>Transfer BCA 6115373947 a/n I Made Bayu Dharma Wibawa</b>
+                                            </label>
+                                            <br>
+                                            Make your payment directly into our bank account. 
+                                            Please use your Order ID as the payment reference to escaper@gmail.com. 
+                                            Your order will not be shipped until the funds have cleared in our account.
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="radPayPal" id="radPayPal" value="option2">
+                                            <label class="form-check-label" for="radPayPal">
+                                                <b>PayPal</b>
+                                                <img src="{{asset('images/paypal icon.png')}}" alt="PayPal Icon" style="width:84px;height:37px;">
+                                            </label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><button type="submit" class="btn btn-primary">PLACE ORDER</button></td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -226,6 +228,12 @@
         });
         $('#radTrfBank').change(function() {
             $('#radPayPal').removeAttr("checked");
+        });
+        $('#showlogin').click(function() {
+            $('#login').css('display', 'block');
+        });
+        $('#showcoupon').click(function() {
+            $('#coupon').css('display', 'block');
         });
     });
 </script>

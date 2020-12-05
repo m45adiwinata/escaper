@@ -166,7 +166,7 @@ class CartController extends Controller
             $message->subject('Purchase '.$temp['guest_code']);
         });
 
-        return redirect("/");
+        return redirect("/home");
     }
 
     public function setLunas(Request $request)
@@ -262,8 +262,12 @@ class CartController extends Controller
             }
             $grand_total += $total;
         }
-        $grand_total = number_format($grand_total, 2, ',', '.');
-        ($_COOKIE['currency'] == 'IDR') ? $grand_total = 'Rp '.$grand_total : $grand_total = $grand_total.' $';
+        if ($_COOKIE['currency'] == 'IDR') {
+            $grand_total = 'Rp '.number_format($grand_total, 0, ',', '.');
+        }
+        else {
+            $grand_total = '$ '.number_format($grand_total, 2, ',', '.');
+        }
         return $grand_total;
     }
 }
