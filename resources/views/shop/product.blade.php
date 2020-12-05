@@ -12,7 +12,7 @@
           <div class="swiper-container gallery-top mb-4">
             <div class="swiper-wrapper">
               @foreach($product->image as $image)
-              <div class="swiper-slide cover" style="background-image:url(images/{{$image}})"></div>
+              <div class="swiper-slide cover" style="background-image:url({{$image}})"></div>
               @endforeach
             </div>
             <div class="swiper-button-next"></div>
@@ -21,7 +21,7 @@
           <div class="swiper-container gallery-thumbs">
             <div class="swiper-wrapper">
               @foreach($product->image as $image)
-              <div class="swiper-slide" style="background-image:url(images/{{$image}})"></div>
+              <div class="swiper-slide" style="background-image:url({{$image}})"></div>
               @endforeach
             </div>
           </div>

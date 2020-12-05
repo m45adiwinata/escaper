@@ -14,9 +14,9 @@
             <a href="/product?productid={{$product->id}}">
             <figure>
               @if(count($product->image) > 1) 
-              <img src="images/{{$product->image[1]}}" alt="Image" class="bottom img-fluid">
+              <img src="{{$product->image[1]}}" alt="Image" class="bottom img-fluid">
               @endif
-              <img src="images/{{$product->image[0]}}" alt="Image" class=" top img-fluid">
+              <img src="{{$product->image[0]}}" alt="Image" class=" top img-fluid">
             </figure>
             </a>
           <div class="px-4">

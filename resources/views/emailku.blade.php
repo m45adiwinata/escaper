@@ -12,7 +12,7 @@
     <tbody>
     @foreach($carts as $cart)
         <tr>
-            <td><img src="{{$message->embed($cart['image'])}}" alt="{{$cart['name']}}">{{$cart['name']}}</td>
+            <td><img src="{{$message->embed($cart['image'])}}" alt="{{$cart['name']}}" style="width:240px; height:320px;">{{$cart['name']}}</td>
             <td>{{$cart['qty']}}</td>
             <td>{{$cart['price']}}</td>
             <td style="align:right;">{{$cart['subtotal']}}</td>
