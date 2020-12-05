@@ -36,7 +36,12 @@
                                 <a class="hitam-ke-orange" href="product?productid={{$cart->product()->first()->id}}">{{$cart->product()->first()->name}} - {{$cart->avl->size_init}}</a>
                             </td>
                             <td class="align-middle">
-                                {{$_COOKIE['currency'] == 'IDR' ? 'Rp ': '$ '}}{{number_format($cart->avl->IDR, 0, ',', '.')}}
+                                {{$_COOKIE['currency'] == 'IDR' ? 'Rp ': '$ '}}
+                                @if ($_COOKIE['currency'] == 'IDR')
+                                {{number_format($cart->avl->IDR, 0, ',', '.')}}
+                                @else
+                                {{number_format($cart->avl->USD, 2, ',', '.')}}
+                                @endif
                             </td>
                             <td class="align-middle">
                                 <input type="number" placeholder="First name" value="{{$cart->amount}}" id="qty-{{$cart->id}}" min="1" max="{{$cart->avl->stocks}}" onchange="changeQty({{$cart->id}})" required>
