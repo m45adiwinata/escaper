@@ -6,7 +6,7 @@
 <div class="swiper-container">
     <div class="swiper-wrapper">
       @foreach($lookbook as $lb)
-    	<div class="swiper-slide" style="background-image:url(images/{{$lb->image}})"></div>
+    	<div class="swiper-slide" style="background-image:url({{$lb->image}})"></div>
       @endforeach
     </div>
     <div class="swiper-pagination"></div>
