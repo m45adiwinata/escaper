@@ -85,7 +85,7 @@ class ProductController extends AdminController
             $id++;
         }
         // dd($id);
-        $form->multipleImage('image', 'Image')->move('products/'.$id)->removable();
+        $form->multipleImage('image', 'Image')->move('images/products/'.$id)->removable();
         $form->text('name', __('Name'));
         $form->textarea('desc', __('Desc'));
         $form->hasMany('availability', function (Form\NestedForm $form) {
