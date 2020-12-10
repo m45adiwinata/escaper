@@ -6,4 +6,4 @@
 <br>
 You can confirm its done by click the link below.
 <br>
-<a href="/submitpayment/{{$id}}">Submit the payment</a>
+<a href="escaper-store.com/submitpayment/{{$id}}">Submit the payment</a>

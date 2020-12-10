@@ -75,8 +75,7 @@ class CartController extends Controller
                 $user->first_name = $data->first_name;
                 $user->last_name = $data->last_name;
                 $user->email = $data->email;
-                $user->username = $data->username;
-                $user->password = md5('escaper');
+                $user->password = md5($request->new_password);
                 $user->save();
             }
         }
@@ -173,53 +172,56 @@ class CartController extends Controller
     {
         $this->validate($request, [
             'id' => 'required',
+            'password' => 'required'
         ]);
-        $data = Checkout::find($request->id);
-        $data->lunas = 1;
-        $data->save();
-
-        return redirect('');
-    }
-
-    public function testEmail()
-    {
-        $data = Checkout::first();
-        $grand_total = 0;
-        $carts = array();
-        foreach (Cart::where('guest_code', $data->guest_code)->get() as $key => $d) {
-            $cart = array('name' => $d->product()->first()->name, 'qty' => $d->amount, 'price' => 0, 'subtotal' => 0, 'image' => '');
-            $cart['image'] = $d->product()->first()->image[0];
-            $avl = ProductAvailability::where('product_id', $d->product_id)->where('size_init', $d->sizeInitial()->first()->initial)->first();
-            if ($d->currency == 'IDR') {
-                $total = $avl->IDR * $d->amount;
-                $cart['price'] = $avl->IDR;
-                $cart['subtotal'] = $total;
-            }
-            else {
-                $total = $avl->USD * $d->amount;
-                $cart['price'] = $avl->IDR;
-                $cart['subtotal'] = $total;
-            }
-            $grand_total += $total;
-            array_push($carts, $cart);
+        if(md5($request->password) == md5('escaper2017')) {
+            $data = Checkout::find($request->id);
+            $data->lunas = 1;
+            $data->save();
+            return redirect('/home');
         }
-        
-        $temp = array(
-            'email' => $data->email,
-            'first_name' => $data->first_name,
-            'last_name' => $data->last_name,
-            'guest_code' => $data->guest_code,
-            'currency' => $data->currency,
-            'grand_total' => $grand_total,
-            'carts' => $carts
-        );
-        
-        Mail::send('emailku', $temp, function($message) use ($temp) {
-            $message->to('m45adiwinata@gmail.com');
-            $message->from('info@escaper-store.com');
-            $message->subject('Purchase '.$temp['guest_code']);
-        });
+        return redirect('/submitpayment/$request->id');
     }
+
+    // public function testEmail()
+    // {
+    //     $data = Checkout::first();
+    //     $grand_total = 0;
+    //     $carts = array();
+    //     foreach (Cart::where('guest_code', $data->guest_code)->get() as $key => $d) {
+    //         $cart = array('name' => $d->product()->first()->name, 'qty' => $d->amount, 'price' => 0, 'subtotal' => 0, 'image' => '');
+    //         $cart['image'] = $d->product()->first()->image[0];
+    //         $avl = ProductAvailability::where('product_id', $d->product_id)->where('size_init', $d->sizeInitial()->first()->initial)->first();
+    //         if ($d->currency == 'IDR') {
+    //             $total = $avl->IDR * $d->amount;
+    //             $cart['price'] = $avl->IDR;
+    //             $cart['subtotal'] = $total;
+    //         }
+    //         else {
+    //             $total = $avl->USD * $d->amount;
+    //             $cart['price'] = $avl->IDR;
+    //             $cart['subtotal'] = $total;
+    //         }
+    //         $grand_total += $total;
+    //         array_push($carts, $cart);
+    //     }
+        
+    //     $temp = array(
+    //         'email' => $data->email,
+    //         'first_name' => $data->first_name,
+    //         'last_name' => $data->last_name,
+    //         'guest_code' => $data->guest_code,
+    //         'currency' => $data->currency,
+    //         'grand_total' => $grand_total,
+    //         'carts' => $carts
+    //     );
+        
+    //     Mail::send('emailku', $temp, function($message) use ($temp) {
+    //         $message->to('m45adiwinata@gmail.com');
+    //         $message->from('info@escaper-store.com');
+    //         $message->subject('Purchase '.$temp['guest_code']);
+    //     });
+    // }
 
     public function received($id)
     {
@@ -269,5 +271,11 @@ class CartController extends Controller
             $grand_total = '$ '.number_format($grand_total, 2, ',', '.');
         }
         return $grand_total;
+    }
+
+    public function submitPayment($checkout_id)
+    {
+        $checkout = Checkout::find($checkout_id);
+        return view('submitpayment', $checkout);
     }
 }

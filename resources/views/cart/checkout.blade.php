@@ -121,6 +121,10 @@
                                 Create an account?
                             </label>
                         </div>
+                        <div class="form-group" id="create-password" style="display:none;">
+                            <label for="inputNewaPass"><b>Create your password</b></label>
+                            <input type="password" class="form-control" name="new_password" id="inputNewaPass">
+                        </div>
                         <br>
                         <h4>ADDITIONAL INFORMATION</h4>
                         <div class="form-group">
@@ -234,6 +238,14 @@
         });
         $('#showcoupon').click(function() {
             $('#coupon').css('display', 'block');
+        });
+        $('#checkCreateAcc').change(function() {
+            if(this.checked) {
+                $('#create-password').css('display', 'block');
+            }
+            else {
+                $('#create-password').css('display', 'none');
+            }
         });
     });
 </script>

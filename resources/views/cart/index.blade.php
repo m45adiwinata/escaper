@@ -5,13 +5,14 @@
 <div class="product">
     <div class="container" id="cart-container">
         @php $grandtotal = 0; $subtotal = 0; @endphp
-        <div class="row">
+        @if(count($carts) > 0)
+        <div class="row" id="contained">
             <div class="col-md-12">
                 <table class="tbl">
                     <tr>
                         <td><a href="/cart">SHOPPING CART</a></td>
                         <td>></td>
-                        <td><a href="/cart/checkout">CHECKOUT DETAILS</td>
+                        <td>CHECKOUT DETAILS</td>
                         <td>></td>
                         <td>ORDER COMPLETE</td>
                     </tr>
@@ -109,6 +110,18 @@
                 </div>
             </div>
         </div>
+        <div class="row" id="emptycart" style="display:none;">
+            <div class="col-md-12">
+                Your cart is empty. <a href="/shop">back to shop</a>
+            </div>
+        </div>
+        @else
+        <div class="row">
+            <div class="col-md-12">
+                Your cart is empty. <a href="/shop">back to shop</a>
+            </div>
+        </div>
+        @endif
     </div>
 </div>
 @include('components.footer')
@@ -131,6 +144,7 @@
             }
             $.get('/cart/get-grand-total', function(grandtotal) {
                 $('#grandtotal').html(grandtotal);
+                $('#subtotal').html(grandtotal);
             });
             $.get('/cart-check', function(data) {
                 console.log(data.count);
@@ -146,6 +160,8 @@
                     $('#cart').css('color', 'black');
                     $('#cart').html('0');
                     $('#cart-items').empty();
+                    $('#contained').css('display', 'none');
+                    $('#emptycart').css('display', 'block');
                 }
             });
         });
