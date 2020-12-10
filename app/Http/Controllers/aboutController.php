@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\ViewAbout;
+use App\TextBerjalan;
 
 class aboutController extends Controller
 {
@@ -22,6 +23,7 @@ class aboutController extends Controller
             return redirect('/');
         }
         $data['about'] = ViewAbout::where('status', '1')->orderBy('created_at')->first();
+        $data['textberjalan'] = TextBerjalan::where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'))->orderBy('created_at')->first();
         // dd(url('images/'.$data['about']->background));
         return view('about', $data);
     }

@@ -26,7 +26,7 @@
         <div class="site-wrap">
             @if($_COOKIE['currency'] == 'USD')
             <marquee behavior="scroll" direction="left" style="color:black; font-weight:bold;">
-                FREE SHPPING WORLDWIDE FOR ORDERS OVER $150
+                {{$textberjalan->text}}
             </marquee>
             @endif
             @yield('content')

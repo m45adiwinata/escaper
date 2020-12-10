@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Cart;
+use App\TextBerjalan;
 use DateTime;
 
 class homeController extends Controller
@@ -33,7 +34,8 @@ class homeController extends Controller
         if (!isset($_COOKIE['guest_code'])) {
             return redirect('/');
         }
-        return view('homepage');
+        $data['textberjalan'] = TextBerjalan::where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'))->orderBy('created_at')->first();
+        return view('homepage', $data);
     }
 
     public function welcome(Request $request)

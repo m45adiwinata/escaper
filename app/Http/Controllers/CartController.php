@@ -9,6 +9,7 @@ use App\ProductAvailability;
 use App\Checkout;
 use App\UserShop;
 use App\Subscriber;
+use App\TextBerjalan;
 
 class CartController extends Controller
 {
@@ -20,6 +21,7 @@ class CartController extends Controller
                 $data['carts'][$i]->avl = ProductAvailability::where('product_id', $data['carts'][$i]->product_id)
                                             ->where('size_init', $data['carts'][$i]->sizeInitial()->first()->initial)->first();
             }
+            $data['textberjalan'] = TextBerjalan::where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'))->orderBy('created_at')->first();
             return view('cart.index', $data);
         }
 
@@ -40,6 +42,7 @@ class CartController extends Controller
                     $data['carts'][$i]->total = $data['carts'][$i]->avl->USD * $data['carts'][$i]->amount;
                 }
             }
+            $data['textberjalan'] = TextBerjalan::where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'))->orderBy('created_at')->first();
             return view('cart.checkout', $data);
         }
 
@@ -134,6 +137,7 @@ class CartController extends Controller
 
     public function uploadPayment($id) {
         $data['checkout'] = Checkout::find($id);
+        $data['textberjalan'] = TextBerjalan::where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'))->orderBy('created_at')->first();
         return view('upload', $data);
     }
 
@@ -164,8 +168,20 @@ class CartController extends Controller
             $message->from('info@escaper-store.com');
             $message->subject('Purchase '.$temp['guest_code']);
         });
-
+        
         return redirect("/home");
+    }
+    
+    public function received($id)
+    {
+        $data = Checkout::find($id);
+        return view('cart.received', $data);
+    }
+
+    public function submitPayment($checkout_id)
+    {
+        $checkout = Checkout::find($checkout_id);
+        return view('submitpayment', $checkout);
     }
 
     public function setLunas(Request $request)
@@ -223,12 +239,6 @@ class CartController extends Controller
     //     });
     // }
 
-    public function received($id)
-    {
-        $data = Checkout::find($id);
-        return view('cart.received', $data);
-    }
-
     public function changeAmt()
     {
         Cart::where('id', $_GET['cart_id'])->update(['amount' => $_GET['qty']]);
@@ -273,9 +283,5 @@ class CartController extends Controller
         return $grand_total;
     }
 
-    public function submitPayment($checkout_id)
-    {
-        $checkout = Checkout::find($checkout_id);
-        return view('submitpayment', $checkout);
-    }
+    
 }

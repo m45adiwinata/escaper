@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Lookbook;
+use App\TextBerjalan;
 
 class lookbookController extends Controller
 {
@@ -22,6 +23,7 @@ class lookbookController extends Controller
             return redirect('/');
         }
         $data['lookbook'] = Lookbook::get();
+        $data['textberjalan'] = TextBerjalan::where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'))->orderBy('created_at')->first();
         return view('lookbook', $data);
     }
 }

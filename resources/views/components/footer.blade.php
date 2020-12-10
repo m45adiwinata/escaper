@@ -6,7 +6,7 @@
                 <a href="#">Shipping</a>
             </div>
             <div class="col-sm footer-subscribe">
-                <form action="{{route('subscriber.create')}}" method="POST">
+                <form action="{{route('subscriber.store')}}" method="POST">
                     @csrf
                     <input type="email" name="email" id="subscribe" placeholder="Enter your email" autocomplete="off">
                     <button class="btn" type="submit">SUBSCRIBE</button>

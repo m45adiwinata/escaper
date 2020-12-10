@@ -72,7 +72,7 @@ class AboutController extends AdminController
         $form->textarea('text2', __('Text2'));
         $form->textarea('text3', __('Text3'));
         $form->textarea('text4', __('Text4'));
-        $form->image('background', __('Background'))->move('background/about')->removable();
+        $form->image('background', __('Background'))->move('images/background/about')->removable();
         $form->switch('status', __('Status'))->default(1);
 
         return $form;

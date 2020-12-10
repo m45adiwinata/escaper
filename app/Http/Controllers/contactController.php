@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\EscaperEmail;
 use App\ViewContact;
 use App\Checkout;
+use App\TextBerjalan;
 
 class contactController extends Controller
 {
@@ -25,7 +26,7 @@ class contactController extends Controller
             return redirect('/');
         }
         $data['contact'] = ViewContact::where('status', 1)->orderBy('updated_at')->first();
-
+        $data['textberjalan'] = TextBerjalan::where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'))->orderBy('created_at')->first();
         return view('contact', $data);
     }
 

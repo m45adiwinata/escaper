@@ -43,7 +43,7 @@ Route::get('/send-email', 'ContactController@sendEmail');
 Route::get('/cart/received/{id}', 'CartController@received');
 // Route::get('/test-sending-email', 'CartController@testEmail');
 Route::post('/cart/set-lunas', 'CartController@setLunas')->name('setlunas');
-Route::post('/subscriber/create', 'SubscriberController@create')->name('subscriber.create');
+Route::post('/subscriber/store', 'SubscriberController@store')->name('subscriber.store');
 Route::get('/submitpayment/{checkout_id}', 'CartController@submitPayment');
 Route::get('/construction', function () {
     return view('construction');
