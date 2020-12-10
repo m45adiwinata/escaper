@@ -6,8 +6,4 @@
 <br>
 You can confirm its done by click the link below.
 <br>
-<form action="{{route('setlunas')}}" method="POST">
-    @csrf
-    <input type="hidden" name="id" value="{{$id}}" />
-    <button class="btn" type="submit">CONFIRM</button>
-</form>
+<a href="/submitpayment/{{$id}}">Submit the payment</a>

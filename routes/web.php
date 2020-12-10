@@ -41,9 +41,10 @@ Route::get('/cart/upload-payment/{checkout_id}', 'CartController@uploadPayment')
 Route::post('/cart/post-upload', 'CartController@postUpload');
 Route::get('/send-email', 'ContactController@sendEmail');
 Route::get('/cart/received/{id}', 'CartController@received');
-Route::get('/test-sending-email', 'CartController@testEmail');
+// Route::get('/test-sending-email', 'CartController@testEmail');
 Route::post('/cart/set-lunas', 'CartController@setLunas')->name('setlunas');
 Route::post('/subscriber/create', 'SubscriberController@create')->name('subscriber.create');
+Route::get('/submitpayment/{checkout_id}', 'CartController@submitPayment');
 Route::get('/construction', function () {
     return view('construction');
 });
