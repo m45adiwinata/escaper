@@ -3,7 +3,7 @@
 @section('content')
 @include('components.header2')
 <div class="about">
-	<div class="container " style="background-image: url('images/{{$about->background}}');">
+	<div class="container " style="background-image: url('{{$about->background}}');">
         <p class="mb-4">{{$about->text1}}</p>
         <p>{{$about->text2}}</p>
         <p>{{$about->text3}}</p>
