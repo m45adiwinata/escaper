@@ -19,7 +19,7 @@
                         </li>
                         <li><a href="/lookbook" >LOOKBOOK</a></li>
                         <li><a href="/about" >ABOUT</a></li>
-                        <li><a href="/contact" >CONTACT</a></li>
+                        <li><a href="/contact" >CONTAC</a></li>
                         @include('components.cartblack')
                     </ul>
                 </nav>
