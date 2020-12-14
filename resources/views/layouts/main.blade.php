@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>ESCAPER&#174;</title>
+        <title>ESCAPER&#174;@yield('title')</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
@@ -26,7 +26,7 @@
         <div class="site-wrap">
             @if($_COOKIE['currency'] == 'USD')
             <marquee behavior="scroll" direction="left" style="color:black; font-weight:bold;">
-                {{$textberjalan->text}}
+                {{$textberjalan}}
             </marquee>
             @endif
             @yield('content')

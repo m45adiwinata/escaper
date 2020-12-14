@@ -1,5 +1,7 @@
 @extends('layouts.main')
-
+@section('title')
+ | Checkout
+@endsection
 @section('content')
 @include('components.header2')
 <div class="product">
@@ -131,6 +133,8 @@
                             <label for="inputNotes"><b>Order notes (optional)</b></label>
                             <textarea class="form-control" id="inputNotes" rows="4" name="notes"></textarea>
                         </div>
+                        <input type="hidden" name="discount" id="h-discount" value="0">
+                        <input type="hidden" name="shipping" id="h-shipping" value="0">
                     </div>
                     <div class="col-sm-6">
                         <div style="font-size:14px; border: 3px solid black; padding:15px;">
@@ -147,8 +151,7 @@
                                     <td class="text-right">
                                         <b>
                                             @php $subtotal+= $cart->total; @endphp
-                                            {{($_COOKIE['currency'] == 'IDR') ? 'Rp ' : '$'}}
-                                            {{number_format($cart->total, 2, ',', '.')}}
+                                            {{($_COOKIE['currency'] == 'IDR') ? 'Rp '.number_format($cart->total, 0, ',', '.') : '$ '.number_format($cart->total, 2, ',', '.')}}
                                         </b>
                                     </td>
                                 </tr>
@@ -157,8 +160,15 @@
                                     <td class="text-left"><b>Subtotal</b></td>
                                     <td class="text-right">
                                         <b>
-                                            {{($_COOKIE['currency'] == 'IDR') ? 'Rp ' : '$'}}
-                                            {{number_format($subtotal, 2, ',', '.')}}
+                                            {{($_COOKIE['currency'] == 'IDR') ? 'Rp '.number_format($subtotal, 0, ',', '.') : '$ '.number_format($subtotal, 2, ',', '.')}}
+                                        </b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left"><b>Discount</b></td>
+                                    <td class="text-right">
+                                        <b id="discount-val">
+                                            {{$_COOKIE['currency'] == 'IDR' ? 'Rp 0' : '$ 0'}}
                                         </b>
                                     </td>
                                 </tr>
@@ -166,17 +176,29 @@
                                     <td class="text-left"><b>Shipping</b></td>
                                     <td class="text-right">
                                         <b>
-                                            @php $shipping = 0; @endphp
-                                            Free shipping.
+                                            @php 
+                                            if ($_COOKIE['currency'] == 'USD' && $subtotal >= 150) {
+                                                $shipping = 0; 
+                                                echo('Free shipping.');
+                                            }
+                                            else if ($_COOKIE['currency'] == 'USD') {
+                                                $shipping = 15;
+                                                echo('$ '.number_format($shipping, 2, ',', '.'));
+                                            }
+                                            else {
+                                                $shipping = 0;
+                                                echo('Rp 0');
+                                            }
+                                            @endphp
                                         </b>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="text-left"><b>Total</b></td>
                                     <td class="text-right">
-                                        <b>
+                                        <b id="grandtotal-val">
                                             @php $grandtotal = $subtotal + $shipping; @endphp
-                                            {{($_COOKIE['currency'] == 'IDR') ? 'Rp ' : '$'}} {{number_format($grandtotal, 2, ',', '.')}}
+                                            {{($_COOKIE['currency'] == 'IDR') ? 'Rp '.number_format($grandtotal, 0, ',', '.') : '$ '.number_format($grandtotal, 2, ',', '.')}}
                                         </b>
                                     </td>
                                 </tr>
@@ -220,7 +242,38 @@
 @endsection
 @section('script')
 <script>
+    function formatRupiah(angka, prefix){
+        var number_string = angka.toString(),
+        split   		= number_string.split('.'),
+        sisa     		= split[0].length % 3,
+        rupiah     		= split[0].substr(0, sisa),
+        ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
+        // tambahkan titik jika yang di input sudah menjadi angka ribuan
+        if(ribuan){
+            separator = sisa ? '.' : '';
+            rupiah += separator + ribuan.join('.');
+        }
+        rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+        // return prefix == undefined ? rupiah : (rupiah ? 'Rp ' + rupiah : '');
+        return prefix + ' ' + rupiah
+    }
+    function getCookie(cname) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for(var i = 0; i <ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
     $(document).ready(function() {
+        $('#h-shipping').val({!! $shipping !!});
         $.get('https://restcountries.eu/rest/v2/all', function(countries) {
             countries.forEach(country => {
                 $('#selectCountry').append('<option value="'+country.name+'">'+country.name+'</option>');
@@ -241,10 +294,45 @@
         });
         $('#checkCreateAcc').change(function() {
             if(this.checked) {
-                $('#create-password').css('display', 'block');
+                if($('#inputEmail').val()) {
+                    $('#create-password').css('display', 'block');
+                    $.get('/cart/check-discount/'+$('#inputEmail').val(), function(count) {
+                        if(count == 0) {
+                            subtotal = {!! $subtotal !!};
+                            grandtotal = {!! $grandtotal !!};
+                            discount = subtotal / 10;
+                            $('#h-discount').val(discount);
+                            currency = getCookie('currency');
+                            if(currency == 'IDR') {
+                                prefix = 'Rp';
+                            }
+                            else {
+                                prefix = '$';
+                            }
+                            discount_str = formatRupiah(discount, prefix);
+                            $('#discount-val').html(discount_str);
+                            grandtotal -= discount;
+                            grandtotal_str = formatRupiah(grandtotal, prefix);
+                            $('#grandtotal-val').html(grandtotal_str);
+                        }
+                    });
+                }
+                else {
+                    $('#checkCreateAcc').prop('checked', false);
+                    $('#inputEmail').focus();
+                }
             }
             else {
                 $('#create-password').css('display', 'none');
+                currency = getCookie('currency');
+                if(currency == 'IDR') {
+                    prefix = 'Rp';
+                }
+                else {
+                    prefix = '$';
+                }
+                $('#discount-val').html(prefix + ' 0');
+                $('#h-discount').val(0);
             }
         });
     });

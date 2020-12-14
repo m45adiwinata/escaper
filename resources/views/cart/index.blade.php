@@ -1,5 +1,7 @@
 @extends('layouts.main')
-
+@section('title')
+ | Cart
+@endsection
 @section('content')
 @include('components.header2')
 <div class="product">
@@ -54,7 +56,7 @@
                                 <span id="total-{{$cart->id}}">{{number_format($total, 0, ',', '.')}}</span>
                                 @else
                                 @php $total = $cart->avl->USD * $cart->amount; $subtotal += $total; @endphp
-                                <span id="total-{{$cart->id}}">{{number_format($total, 0, ',', '.')}}</span>
+                                <span id="total-{{$cart->id}}">{{number_format($total, 2, ',', '.')}}</span>
                                 @endif
                                 
                             </td>

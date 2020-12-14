@@ -1,5 +1,7 @@
 @extends('layouts.main')
-
+@section('title')
+ | {{$product->name}}
+@endsection
 @section('content')
 @include('components.header2')
 <div class="product">

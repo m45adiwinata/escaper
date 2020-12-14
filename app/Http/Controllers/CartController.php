@@ -63,6 +63,8 @@ class CartController extends Controller
         $data->zipcode = $request->zipcode;
         $data->phone = $request->phone;
         $data->email = $request->email;
+        $data->discount = $request->discount;
+        $data->shipping = $request->shipping;
         if (isset($request->checkSubscribe)) {
             $data->subscribe = 1;
             if(count(Subscriber::where('email', $data->email)->get()) == 0) {
@@ -77,6 +79,12 @@ class CartController extends Controller
                 $user = new UserShop;
                 $user->first_name = $data->first_name;
                 $user->last_name = $data->last_name;
+                $user->company = $data->company;
+                $user->country = $data->country;
+                $user->address = $data->address;
+                $user->city = $data->city;
+                $user->zipcode = $data->zipcode;
+                $user->phone = $data->phone;
                 $user->email = $data->email;
                 $user->password = md5($request->new_password);
                 $user->save();
@@ -90,7 +98,7 @@ class CartController extends Controller
             $data->pembayaran = 2;
         }
         $data->save();
-        $grand_total = 0;
+        $sub_total = 0;
         $carts = array();
         foreach (Cart::where('guest_code', $data->guest_code)->where('checkout', 0)->get() as $key => $d) {
             $cart = array('name' => $d->product()->first()->name, 'qty' => $d->amount, 'price' => 0, 'subtotal' => 0, 'image' => '');
@@ -106,9 +114,11 @@ class CartController extends Controller
                 $cart['price'] = $avl->IDR;
                 $cart['subtotal'] = $total;
             }
-            $grand_total += $total;
+            $sub_total += $total;
             array_push($carts, $cart);
         }
+        $data->sub_total = $sub_total;
+        $grand_total = $sub_total - $data->discount + $data->shipping;
         $data->grand_total = $grand_total;
         $data->save();
         Cart::where('guest_code', $data->guest_code)->update(['checkout' => 1]);
@@ -283,5 +293,9 @@ class CartController extends Controller
         return $grand_total;
     }
 
-    
+    public function checkDiscount($email)
+    {
+        $count = count(UserShop::where('email', $email)->get());
+        return $count;
+    }
 }
