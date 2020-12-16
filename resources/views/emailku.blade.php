@@ -1,4 +1,4 @@
-<img src="{{$message->embed($logo)}}" alt="ESCAPER'S LOGO" style="width:887px; height:133px;">
+<img src="{{$message->embed($logo)}}" alt="ESCAPER'S LOGO" style="width:887px; height:133px; display:block; margin-left:auto; margin-right:auto;">
 <h2 style="text-align:center;">Thannk you {{ $first_name }} {{$last_name}},<br>your order has been received.</h2>
 <h4 style="text-align:center;">Purchase Code : {{ $guest_code }}</h4>
 <br>
@@ -21,7 +21,7 @@
     <tbody>
     @foreach($carts as $cart)
         <tr>
-            <td style=""><img src="{{$message->embed($cart['image'])}}" alt="{{$cart['name']}}" style="width:240px; height:240px;"><span style="line-height:240px;">{{$cart['name']}}</span></td>
+            <td style=""><img src="{{$message->embed($cart['image'])}}" alt="{{$cart['name']}}" style="width:240px; height:240px;"><br>{{$cart['name']}}</td>
             <td>{{$cart['qty']}}</td>
             <td>{{$currency == 'IDR' ? 'Rp' : '$'}} {{$cart['price']}}</td>
         </tr>
@@ -37,10 +37,12 @@
             </td>
             <td>
                 {{ $payment }}<br>
-                {{$currency == 'IDR' ? 'Rp' : '$'}} {{number_format($sub_total, 2, ',', '.')}}<br>
-                {{ $discount == 0 ? '' : $discount.'<br>' }}
-                {{ $shipping }}<br>
-                {{ $grand_total }}<br>
+                {{$currency == 'IDR' ? 'Rp ' : '$ '}} {{number_format($sub_total, 2, ',', '.')}}<br>
+                @if($discount > 0)
+                {{$currency == 'IDR' ? 'Rp '.number_format($discount, 2, ',', '.').'<br>' : '$ 'number_format($discount, 2, ',', '.').'<br>'}}
+                @endif
+                {{$currency == 'IDR' ? 'Rp '.number_format($shipping, 2, ',', '.') : '$ '.number_format($shipping, 2, ',', '.')}}<br>
+                {{$currency == 'IDR' ? 'Rp ' : '$ '}}{{ number_format($grand_total, 2, ',', '.') }}<br>
             </td>
         </tr>
     </tbody>
