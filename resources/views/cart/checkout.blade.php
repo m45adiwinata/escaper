@@ -333,6 +333,7 @@
                 }
                 $('#discount-val').html(prefix + ' 0');
                 $('#h-discount').val(0);
+                $('#grandtotal-val').html(prefix + ' {!! $grandtotal !!}');
             }
         });
     });

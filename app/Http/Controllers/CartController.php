@@ -89,6 +89,11 @@ class CartController extends Controller
                 $user->password = md5($request->new_password);
                 $user->save();
             }
+            else {
+                $user = UserShop::where('email', $data->email)->first();
+                $user->password = md5($request->new_password);
+                $user->save();
+            }
         }
         $data->notes = $request->notes;
         if (isset($request->radTrfBank)) {
@@ -141,7 +146,7 @@ class CartController extends Controller
             'discount' => $data->discount,
             'shipping' => $data->shipping,
             'carts' => $carts,
-            'logo' => env('APP_URL').'/images/LOGO-PNG BLACKBG.png'
+            'logo' => env('APP_URL').'/images/LOGO-PNG%20BLACKBG.png'
         );
         Mail::send('emailku', $temp, function($message) use ($temp) {
             $message->to($temp['email']);
