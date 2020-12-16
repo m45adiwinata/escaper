@@ -1,27 +1,46 @@
-<h3>Halo, {{ $first_name }} {{$last_name}}, you have ordered this items !</h3>
-<p>Purchase Code : {{ $guest_code }}</p>
+<img src="{{$message->embed($logo)}}" alt="ESCAPER'S LOGO" style="width:887px; height:133px;">
+<h2 style="text-align:center;">Thannk you {{ $first_name }} {{$last_name}},<br>your order has been received.</h2>
+<h4 style="text-align:center;">Purchase Code : {{ $guest_code }}</h4>
+<br>
+<h4>Customer Info</h4>
+<hr>
+{{ $first_name }} {{$last_name}}<br>
+{{ $address }}, {{ $city }}, {{ $zipcode }}<br>
+{{ $country }}<br>
+{{ $phone }}
+<br>
+<br>
 <table class="table">
     <thead>
         <tr>
             <th>Product</th>
-            <th>Qty</th>
+            <th>Quantity</th>
             <th>Price@</th>
-            <th>Total</th>
         </tr>
     </thead>
     <tbody>
     @foreach($carts as $cart)
         <tr>
-            <td><img src="{{$message->embed($cart['image'])}}" alt="{{$cart['name']}}" style="width:240px; height:240px;">{{$cart['name']}}</td>
+            <td style=""><img src="{{$message->embed($cart['image'])}}" alt="{{$cart['name']}}" style="width:240px; height:240px;"><span style="line-height:240px;">{{$cart['name']}}</span></td>
             <td>{{$cart['qty']}}</td>
             <td>{{$currency == 'IDR' ? 'Rp' : '$'}} {{$cart['price']}}</td>
-            <td style="align:right;">{{$currency == 'IDR' ? 'Rp' : '$'}} {{$cart['subtotal']}}</td>
         </tr>
     @endforeach
         <tr>
-            <td colspan="3">GRAND TOTAL</td>
+            <td></td>
             <td>
-                {{$currency == 'IDR' ? 'Rp' : '$'}} {{number_format($grand_total, 2, ',', '.')}}
+                Payment:<br>
+                Subtotal:<br>
+                {{ $discount == 0 ? '' : 'Discount:<br>' }}
+                Shipping:<br>
+                Total:<br>
+            </td>
+            <td>
+                {{ $payment }}<br>
+                {{$currency == 'IDR' ? 'Rp' : '$'}} {{number_format($sub_total, 2, ',', '.')}}<br>
+                {{ $discount == 0 ? '' : $discount.'<br>' }}
+                {{ $shipping }}<br>
+                {{ $grand_total }}<br>
             </td>
         </tr>
     </tbody>

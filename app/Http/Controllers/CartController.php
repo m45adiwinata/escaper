@@ -93,9 +93,11 @@ class CartController extends Controller
         $data->notes = $request->notes;
         if (isset($request->radTrfBank)) {
             $data->pembayaran = 1;
+            $temp_payment = 'Bank Transfer';
         }
         else {
             $data->pembayaran = 2;
+            $temp_payment = 'PayPal';
         }
         $data->save();
         $sub_total = 0;
@@ -111,7 +113,7 @@ class CartController extends Controller
             }
             else {
                 $total = $avl->USD * $d->amount;
-                $cart['price'] = $avl->IDR;
+                $cart['price'] = $avl->USD;
                 $cart['subtotal'] = $total;
             }
             $sub_total += $total;
@@ -126,10 +128,20 @@ class CartController extends Controller
             'email' => $data->email,
             'first_name' => $data->first_name,
             'last_name' => $data->last_name,
+            'address' => $data->address,
+            'zipcode' => $data->zipcode,
+            'city' => $data->city,
+            'country' => $data->country,
+            'phone' => $data->phone,
             'guest_code' => $data->guest_code,
             'currency' => $data->currency,
+            'sub_total' => $sub_total,
             'grand_total' => $grand_total,
-            'carts' => $carts
+            'payment' => $temp_payment,
+            'discount' => $data->discount,
+            'shipping' => $data->shipping,
+            'carts' => $carts,
+            'logo' => env('APP_URL').'/images/LOGO-PNG BLACKBG.png'
         );
         Mail::send('emailku', $temp, function($message) use ($temp) {
             $message->to($temp['email']);
