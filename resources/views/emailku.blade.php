@@ -13,7 +13,7 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Product</th>
+            <th colspan="2">Product</th>
             <th>Quantity</th>
             <th>Price@</th>
         </tr>
@@ -21,19 +21,27 @@
     <tbody>
     @foreach($carts as $cart)
         <tr>
-            <td style=""><img src="{{$message->embed($cart['image'])}}" alt="{{$cart['name']}}" style="width:240px; height:240px;"><br>{{$cart['name']}}</td>
-            <td>{{$cart['qty']}}</td>
-            <td>{{$currency == 'IDR' ? 'Rp' : '$'}} {{$cart['price']}}</td>
+            <td style=""><img src="{{$message->embed($cart['image'])}}" alt="{{$cart['name']}}" style="width:240px; height:240px;"></td>
+            <td>{{$cart['name']}}</td>
+            <td style="text-align:center;">{{$cart['qty']}}</td>
+            <td style="text-align:center;">{{$currency == 'IDR' ? 'Rp' : '$'}} {{$cart['price']}}</td>
         </tr>
     @endforeach
         <tr>
             <td></td>
             <td>
-                Payment:<br>
-                Subtotal:<br>
-                {{ $discount == 0 ? '' : 'Discount:<br>' }}
-                Shipping:<br>
-                Total:<br>
+                Payment<br>
+                Subtotal<br>
+                {{ $discount == 0 ? '' : 'Discount<br>' }}
+                Shipping<br>
+                Total<br>
+            </td>
+            <td>
+                :<br>
+                :<br>
+                {{ $discount == 0 ? '' : ':<br>' }}
+                :<br>
+                :<br>
             </td>
             <td>
                 {{ $payment }}<br>
