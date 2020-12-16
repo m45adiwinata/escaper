@@ -37,9 +37,9 @@
             </td>
             <td>
                 {{ $payment }}<br>
-                {{$currency == 'IDR' ? 'Rp ' : '$ '}} {{number_format($sub_total, 2, ',', '.')}}<br>
+                {{$currency == 'IDR' ? 'Rp ' : '$ '}}{{number_format($sub_total, 2, ',', '.')}}<br>
                 @if($discount > 0)
-                {{$currency == 'IDR' ? 'Rp '.number_format($discount, 2, ',', '.').'<br>' : '$ 'number_format($discount, 2, ',', '.').'<br>'}}
+                {{$currency == 'IDR' ? 'Rp '.number_format($discount, 2, ',', '.').'<br>' : '$ '.number_format($discount, 2, ',', '.').'<br>'}}
                 @endif
                 {{$currency == 'IDR' ? 'Rp '.number_format($shipping, 2, ',', '.') : '$ '.number_format($shipping, 2, ',', '.')}}<br>
                 {{$currency == 'IDR' ? 'Rp ' : '$ '}}{{ number_format($grand_total, 2, ',', '.') }}<br>
