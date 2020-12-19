@@ -48,15 +48,15 @@
                 $.get('/cart-check', function(data) {
                     if (data.count > 0) {
                         $('#cart').html(data.count);
-                        $('#cart').css('color', 'white');
+                        $('#cart-black').html(data.count);
                         $('#cart-items').empty();
-                        for (var i=0; i<data.count; i++) {
-                            $('#cart-items').append('<li>'+data.items[i].product_name+' '+data.items[i].amount+'</li>');
-                        }
+                        // for (var i=0; i<data.count; i++) {
+                        //     $('#cart-items').append('<li>'+data.items[i].product_name+' '+data.items[i].amount+'</li>');
+                        // }
                     }
                     else {
-                        $('#cart').css('color', 'black');
                         $('#cart').html('0');
+                        $('#cart-black').html('0');
                         $('#cart-items').empty();
                     }
                 });

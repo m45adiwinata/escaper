@@ -7,6 +7,12 @@
 <div class="product">
 	<div class="container">
     <div class="shop-header">
+      <div class="container border-0" style="display:none;" id="notification">
+        <div class="row" style="border:1px solid black; padding:5px;">
+          <div class="col-sm-9 pt-1">&#10003 "{{$product->name}}" has been added to your cart.</div>
+          <div class="col-sm-3 text-right"><a class="btn btn-success text-light" style="background:black;" href="/cart">VIEW CART</a></div>
+        </div>
+      </div>
       <p>{{strtoupper($product->type()->first()->name)}}</p>
     </div>
 		<div class="row">
@@ -103,20 +109,21 @@
       });
       $('#btn-add2cart').click(function() {
         if ($('#inputGroupSelect01').val() != "") {
+          $([document.documentElement, document.body]).animate({
+              scrollTop: $("#elementtoScrollToID").offset().top
+          }, 200);
           $.get('/add-to-cart/' + {!! $product->id !!} + '/' + $('#inputGroupSelect01').val() + '/' + $('#qty').val(), function(response) {
             $.get('/cart-check', function(data) {
               if (data.count > 0) {
-                $('#cart').css('color', 'white');
                 $('#cart').html(data.count);
-                $('#cart-items').empty();
-                for (var i=0; i<data.count; i++) {
-                  $('#cart-items').append('<li>'+data.items[i].product_name+' '+data.items[i].amount+'</li>');
-                }
+                $('#cart-black').html(data.count);
+                $('#notification').css('display', 'block');
+                
+                // $('#cart-items').empty();
+                // for (var i=0; i<data.count; i++) {
+                //   $('#cart-items').append('<li>'+data.items[i].product_name+' '+data.items[i].amount+'</li>');
+                // }
               }
-              // else {
-              //   $('#cart').html('0');
-              //   $('#cart-items').empty();
-              // }
             });
           });
           

@@ -15,9 +15,10 @@
                 <td>ORDER COMPLETE</td>
             </tr>
         </table>
-        <div class="message-container container medium-text-center">
+        <div>
             Returning customer? <a href="#" class="showlogin hitam-ke-orange" id="showlogin">Click here to login</a>
             <div id="login" style="display:none;">
+                If you have shopped with us before, please enter your detail below. If you are a new customer, please proceed to the Billing section.
                 <form action="" method="POST">
                     @csrf
                     <div class="form-row">
@@ -173,13 +174,13 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="text-left"><b>Shipping</b></td>
+                                    <td class="text-left"><b>Shipping{{$_COOKIE['currency'] == 'IDR' ? '' : ' (flate rate)'}}</b></td>
                                     <td class="text-right">
                                         <b>
                                             @php 
                                             if ($_COOKIE['currency'] == 'USD' && $subtotal >= 150) {
                                                 $shipping = 0; 
-                                                echo('Free shipping.');
+                                                echo('FREE SHIPPING');
                                             }
                                             else if ($_COOKIE['currency'] == 'USD') {
                                                 $shipping = 15;
@@ -187,7 +188,7 @@
                                             }
                                             else {
                                                 $shipping = 0;
-                                                echo('Rp 0');
+                                                echo('FREE SHIPPING');
                                             }
                                             @endphp
                                         </b>
@@ -211,7 +212,7 @@
                                             </label>
                                             <br>
                                             Make your payment directly into our bank account. 
-                                            Please use your Order ID as the payment reference to escaper@gmail.com. 
+                                            Please use your Order ID as the payment reference to info@escaper-store.com. 
                                             Your order will not be shipped until the funds have cleared in our account.
                                         </div>
                                     </td>

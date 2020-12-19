@@ -21,7 +21,13 @@ class CartController extends Controller
                 $data['carts'][$i]->avl = ProductAvailability::where('product_id', $data['carts'][$i]->product_id)
                                             ->where('size_init', $data['carts'][$i]->sizeInitial()->first()->initial)->first();
             }
-            $data['textberjalan'] = TextBerjalan::where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'))->orderBy('created_at')->first();
+            $textberjalan = TextBerjalan::where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'))->orderBy('created_at')->first();
+            if(!$textberjalan) {
+                $data['textberjalan'] = 'text here';
+            }
+            else {
+                $data['textberjalan'] = $textberjalan->text;
+            }
             return view('cart.index', $data);
         }
 
@@ -42,7 +48,13 @@ class CartController extends Controller
                     $data['carts'][$i]->total = $data['carts'][$i]->avl->USD * $data['carts'][$i]->amount;
                 }
             }
-            $data['textberjalan'] = TextBerjalan::where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'))->orderBy('created_at')->first();
+            $textberjalan = TextBerjalan::where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'))->orderBy('created_at')->first();
+            if(!$textberjalan) {
+                $data['textberjalan'] = 'text here';
+            }
+            else {
+                $data['textberjalan'] = $textberjalan->text;
+            }
             return view('cart.checkout', $data);
         }
 

@@ -64,6 +64,8 @@
                         @endforeach
                     </tbody>
                 </table>
+                <hr>
+                <a href="/shop" class="btn btn-black btn-outline-black rounded-0">&#8592; CONTINUE SHOPPING</a>
             </div>
             <div class="col-md-4 border-left border-right">
                 <table class="table table-borderless">

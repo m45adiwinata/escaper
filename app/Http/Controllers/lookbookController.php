@@ -23,7 +23,13 @@ class lookbookController extends Controller
             return redirect('/');
         }
         $data['lookbook'] = Lookbook::get();
-        $data['textberjalan'] = TextBerjalan::where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'))->orderBy('created_at')->first();
+        $textberjalan = TextBerjalan::where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'))->orderBy('created_at')->first();
+        if(!$textberjalan) {
+            $data['textberjalan'] = 'text here';
+        }
+        else {
+            $data['textberjalan'] = $textberjalan->text;
+        }
         return view('lookbook', $data);
     }
 }

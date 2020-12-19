@@ -8,6 +8,7 @@
             <div>
             	<div style ="margin-top: 25px;" class="row align-items-center justify-content-center">
             		<a href="/shop" class="btn btn-white btn-outline-white py-3 px-5 rounded-0">SHOP NOW</a>
+					
             	</div>
             </div>
         </div>

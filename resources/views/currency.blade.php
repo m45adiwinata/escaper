@@ -7,20 +7,36 @@
         <link href="https://fonts.googleapis.com/css?family=Muli:300,400,700,900" rel="stylesheet">
         <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">
         <link rel="stylesheet" href="{{asset('css/style.css')}}">
+        <style>
+            @font-face {
+                font-family: escaperfont;
+                src: url({{asset('fonts/Hanson-Bold.ttf')}});
+            }
+            #header-logo {
+                font-family: escaperfont;
+            }
+            .currencyoption {
+                border:none; padding:0px; font-size:80px; font-weight: 800; width:200px; height:200px; background:white;
+                padding-bottom:100px;
+            }
+        </style>
     </head>
     <body>
         <div>
-        <div class="currency container">
-                <h1>CHOOSE YOUR CURRENCY</h1>
+        <div class="currency container text-center">
+                <div class="row justify-content-center">
+                    <div class="col-xl">
+                        <h1 class="" id="header-logo">ESCAPER<sup style="font-size:40%; vertical-align:top; top:7px;">&#174;</sup></h1>
+                    </div>
+                </div>
+                <span style="font-size:50px; font-weight: 800; color:black;">CHOOSE YOUR CURRENCY</span>
                 <div class="row justify-content-center">
                     <div class="col-sm-3">
                         <form method="POST" ACTION="/welcome">
                             @csrf
                             <input type="hidden" value="IDR" name="currency">
                             <div class="home-item">
-                                <figure>
-                                    <button type="submit" style="border:none; padding:0px;"><img src="images/idr2.png" alt="Image" class="img-fluid"></button>
-                                </figure>
+                                <button type="submit" class="currencyoption">IDR</button>
                             </div>
                         </form>
                     </div>
@@ -29,9 +45,7 @@
                             @csrf
                             <input type="hidden" value="USD" name="currency">
                             <div class="home-item">
-                                <figure>
-                                    <button type="submit" style="border:none; padding:0px;"><img src="images/usd2.png" alt="Image" class="img-fluid"></button>
-                                </figure>
+                                <button type="submit" class="currencyoption">USD</button>
                             </div>
                         </form>
                     </div>
@@ -49,7 +63,16 @@
     <script src="js/aos.js"></script>
     <script src="js/jquery.sticky.js"></script>
     
-    <script src="js/main.js"></script>    
+    <script src="js/main.js"></script> 
+    <script>
+        $(document).ready(function() {
+            $('.currencyoption').hover(function() {
+                $(this).css('font-size','90px');
+            }, function() {
+                $(this).css('font-size','80px');
+            });
+        });
+    </script>
     @yield('script')
     </body>
 </html>

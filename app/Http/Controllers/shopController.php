@@ -34,7 +34,13 @@ class shopController extends Controller
             else {
                 $data['products'] = Product::get();
             }
-            $data['textberjalan'] = TextBerjalan::where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'))->orderBy('created_at')->first();
+            $textberjalan = TextBerjalan::where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'))->orderBy('created_at')->first();
+            if(!$textberjalan) {
+                $data['textberjalan'] = 'text here';
+            }
+            else {
+                $data['textberjalan'] = $textberjalan->text;
+            }
             return view('shop/shop', $data);
         }
         else {
@@ -47,7 +53,13 @@ class shopController extends Controller
         if (isset($_COOKIE['guest_code']) && isset($_COOKIE['currency'])) {
             $data['product'] = Product::find($_GET["productid"]);
             $data ['product']->stocks = $data['product']->availability()->first()->stocks;
-            $data['textberjalan'] = TextBerjalan::where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'))->orderBy('created_at')->first();
+            $textberjalan = TextBerjalan::where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'))->orderBy('created_at')->first();
+            if(!$textberjalan) {
+                $data['textberjalan'] = 'text here';
+            }
+            else {
+                $data['textberjalan'] = $textberjalan->text;
+            }
             return view('shop/product', $data);
         }
         else {
