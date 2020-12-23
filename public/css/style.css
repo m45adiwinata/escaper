@@ -427,3 +427,16 @@ a:hover {
   width: 200px;
   
 }
+.tombol-delete-cart {
+  width:25px; height:25px; font-size:10px; font-weight:bold; border-radius:50%; background:white; border:2px solid black; opacity:0.2;
+}
+.tombol-delete-cart:hover {
+  opacity: 1;
+}
+.hitam-ke-orange {
+  color: black;
+}
+.hitam-ke-orange:hover {
+  color: #f16821;
+  font-weight: bold;
+}

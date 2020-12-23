@@ -20,4 +20,6 @@ Route::group([
     $router->resource('broadcasts', BroadcastController::class);
     $router->resource('sizes', SizeController::class);
     $router->resource('text-berjalans', TextBerjalanController::class);
+    $router->resource('stockists', StockistController::class);
+    $router->resource('shippings', ShippingController::class);
 });

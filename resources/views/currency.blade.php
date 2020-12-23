@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Escaper Store</title>
+        <title>ESCAPER&#174; | Select currency</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link href="https://fonts.googleapis.com/css?family=Muli:300,400,700,900" rel="stylesheet">
@@ -23,56 +23,52 @@
     </head>
     <body>
         <div>
-        <div class="currency container text-center">
-                <div class="row justify-content-center">
-                    <div class="col-xl">
-                        <h1 class="" id="header-logo">ESCAPER<sup style="font-size:40%; vertical-align:top; top:7px;">&#174;</sup></h1>
+            <div class="currency container text-center">
+                    <div class="row justify-content-center">
+                        <div class="col-xl">
+                            <h1 class="" id="header-logo">ESCAPER<sup style="font-size:40%; vertical-align:top; top:7px;">&#174;</sup></h1>
+                        </div>
                     </div>
-                </div>
-                <span style="font-size:50px; font-weight: 800; color:black;">CHOOSE YOUR CURRENCY</span>
-                <div class="row justify-content-center">
-                    <div class="col-sm-3">
-                        <form method="POST" ACTION="/welcome">
-                            @csrf
-                            <input type="hidden" value="IDR" name="currency">
-                            <div class="home-item">
-                                <button type="submit" class="currencyoption">IDR</button>
-                            </div>
-                        </form>
+                    <span style="font-size:50px; font-weight: 800; color:black;">CHOOSE YOUR CURRENCY</span>
+                    <div class="row justify-content-center">
+                        <div class="col-sm-3">
+                            <form method="POST" ACTION="/welcome">
+                                @csrf
+                                <input type="hidden" value="IDR" name="currency">
+                                <div class="home-item">
+                                    <button type="submit" class="currencyoption">IDR</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-sm-3">
+                            <form method="POST" ACTION="/welcome">
+                                @csrf
+                                <input type="hidden" value="USD" name="currency">
+                                <div class="home-item">
+                                    <button type="submit" class="currencyoption">USD</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                    <div class="col-sm-3">
-                        <form method="POST" ACTION="/welcome">
-                            @csrf
-                            <input type="hidden" value="USD" name="currency">
-                            <div class="home-item">
-                                <button type="submit" class="currencyoption">USD</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+            </div>
         </div>
-        </div>
-    
-        
-    <script src="js/jquery-3.3.1.min.js"></script>
-    <script src="js/jquery-migrate-3.0.1.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/owl.carousel.min.js"></script>
-    <script src="js/jquery.stellar.min.js"></script>
-    <script src="js/jquery.countdown.min.js"></script>
-    <script src="js/aos.js"></script>
-    <script src="js/jquery.sticky.js"></script>
-    
-    <script src="js/main.js"></script> 
-    <script>
-        $(document).ready(function() {
-            $('.currencyoption').hover(function() {
-                $(this).css('font-size','90px');
-            }, function() {
-                $(this).css('font-size','80px');
+        <script src="js/jquery-3.3.1.min.js"></script>
+        <script src="js/jquery-migrate-3.0.1.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/owl.carousel.min.js"></script>
+        <script src="js/jquery.stellar.min.js"></script>
+        <script src="js/jquery.countdown.min.js"></script>
+        <script src="js/aos.js"></script>
+        <script src="js/jquery.sticky.js"></script>
+        <script src="js/main.js"></script> 
+        <script>
+            $(document).ready(function() {
+                $('.currencyoption').hover(function() {
+                    $(this).css('font-size','90px');
+                }, function() {
+                    $(this).css('font-size','80px');
+                });
             });
-        });
-    </script>
-    @yield('script')
+        </script>
     </body>
 </html>

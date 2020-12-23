@@ -93,12 +93,16 @@
                             <select class="form-control" id="selectCountry" name="country"><option value="" selected="selected" disabled></option></select>
                         </div>
                         <div class="form-group">
-                            <label for="inputAddress"><b>Address *</b></label>
-                            <input type="text" class="form-control" id="inputAddress" placeholder="" name="address">
+                            <label for="selectCountry"><b>State/Province *</b></label>
+                            <select class="form-control" id="selectState" name="state"><option value="" selected="selected" disabled></option></select>
                         </div>
                         <div class="form-group">
-                            <label for="inputCity"><b>City *</b></label>
-                            <input type="text" class="form-control" id="inputCity" placeholder="" name="city">
+                            <label for="selectCountry"><b>City *</b></label>
+                            <select class="form-control" id="selectCity" name="city"><option value="" selected="selected" disabled></option></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputAddress"><b>Address *</b></label>
+                            <input type="text" class="form-control" id="inputAddress" placeholder="" name="address">
                         </div>
                         <div class="form-group">
                             <label for="inputZipCode"><b>Zip Code (optional)</b></label>
@@ -225,6 +229,11 @@
                                                 <b>PayPal</b>
                                                 <img src="{{asset('images/paypal icon.png')}}" alt="PayPal Icon" style="width:84px;height:37px;">
                                             </label>
+                                            <div id="smart-button-container" style="display:none;">
+                                                <div style="text-align: center;">
+                                                    <div id="paypal-button-container"></div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>
@@ -242,7 +251,38 @@
 @include('components.footer')
 @endsection
 @section('script')
+<script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD" data-sdk-integration-source="button-factory"></script>
 <script>
+    // var req = unirest("GET", "https://www.universal-tutorial.com/api/countries/");
+    // req.headers({
+    //     "Accept": "application/json",
+    //     "api-token": "brooWpJXcwCVMd_VcEmwf-9V7PiwSJxo_M81ppmVYgFPckBiJj3xGRzA4bIIDxlQuhI",
+    //     "user-email": "m45adiwinata@gmail.com"
+    // });
+    function initPayPalButton() {
+        paypal.Buttons({
+            style: {
+                shape: 'rect',
+                color: 'gold',
+                layout: 'vertical',
+                label: 'paypal',
+            },
+            createOrder: function(data, actions) {
+                return actions.order.create({
+                    purchase_units: [{"amount":{"currency_code":"USD","value":12}}]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    alert('Transaction completed by ' + details.payer.name.given_name + '!');
+                });
+            },
+            onError: function(err) {
+                console.log(err);
+            }
+        }).render('#paypal-button-container');
+    }
+    initPayPalButton();
     function formatRupiah(angka, prefix){
         var number_string = angka.toString(),
         split   		= number_string.split('.'),
@@ -274,13 +314,72 @@
         return "";
     }
     $(document).ready(function() {
+        $.ajax({
+            url: "https://www.universal-tutorial.com/api/countries/",
+            type: "GET",
+            dataType: 'json',
+            headers: {
+                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJtNDVhZGl3aW5hdGFAZ21haWwuY29tIiwiYXBpX3Rva2VuIjoiYnJvb1dwSlhjd0NWTWRfVmNFbXdmLTlWN1Bpd1NKeG9fTTgxcHBtVllnRlBja0JpSmozeEdSekE0YklJRHhsUXVoSSJ9LCJleHAiOjE2MDg3NDc5ODN9.gGUuP_H0e6n98mQDGWYPt0ugPsQKXgXJ9gPPifjMS6k",
+                "Accept": "application/json"
+            },
+            contentType: 'application/json; charset=utf-8',
+            success: function(result) { 
+                // console.log(result);
+                result.forEach(country => {
+                    $('#selectCountry').append('<option value="'+country.country_name+'">'+country.country_name+'</option>');
+                });
+            },
+            error: function (error) {   console.log(error); }
+        });
         $('#h-shipping').val({!! $shipping !!});
-        $.get('https://restcountries.eu/rest/v2/all', function(countries) {
-            countries.forEach(country => {
-                $('#selectCountry').append('<option value="'+country.name+'">'+country.name+'</option>');
+        // $.get('https://restcountries.eu/rest/v2/all', function(countries) {
+        //     countries.forEach(country => {
+        //         $('#selectCountry').append('<option value="'+country.name+'">'+country.name+'</option>');
+        //     });
+        // });
+        $('#selectCountry').select2();
+        $('#selectState').select2();
+        $('#selectCity').select2();
+        $('#selectCountry').change(function() {
+            $('#selectState').empty().append('<option value="" selected="selected" disabled></option>');
+            var country = $(this).select2('data')[0].id;
+            $.ajax({
+                url: "https://www.universal-tutorial.com/api/states/"+country,
+                type: "GET",
+                dataType: 'json',
+                headers: {
+                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJtNDVhZGl3aW5hdGFAZ21haWwuY29tIiwiYXBpX3Rva2VuIjoiYnJvb1dwSlhjd0NWTWRfVmNFbXdmLTlWN1Bpd1NKeG9fTTgxcHBtVllnRlBja0JpSmozeEdSekE0YklJRHhsUXVoSSJ9LCJleHAiOjE2MDg3NDc5ODN9.gGUuP_H0e6n98mQDGWYPt0ugPsQKXgXJ9gPPifjMS6k",
+                    "Accept": "application/json"
+                },
+                contentType: 'application/json; charset=utf-8',
+                success: function(result) { 
+                    result.forEach(state => {
+                        $('#selectState').append('<option value="'+state.state_name+'">'+state.state_name+'</option>');
+                    });
+                },
+                error: function (error) {   console.log(error); }
             });
         });
-        $('#selectCountry').select2();
+        $('#selectState').change(function() {
+            $('#selectCity').empty().append('<option value="" selected="selected" disabled></option>');
+            var state = $(this).select2('data')[0].id;
+            $.ajax({
+                url: "https://www.universal-tutorial.com/api/cities/"+state,
+                type: "GET",
+                dataType: 'json',
+                headers: {
+                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJtNDVhZGl3aW5hdGFAZ21haWwuY29tIiwiYXBpX3Rva2VuIjoiYnJvb1dwSlhjd0NWTWRfVmNFbXdmLTlWN1Bpd1NKeG9fTTgxcHBtVllnRlBja0JpSmozeEdSekE0YklJRHhsUXVoSSJ9LCJleHAiOjE2MDg3NDc5ODN9.gGUuP_H0e6n98mQDGWYPt0ugPsQKXgXJ9gPPifjMS6k",
+                    "Accept": "application/json"
+                },
+                contentType: 'application/json; charset=utf-8',
+                success: function(result) { 
+                    result.forEach(city => {
+                        $('#selectCity').append('<option value="'+city.city_name+'">'+city.city_name+'</option>');
+                    });
+                },
+                error: function (error) {   console.log(error); }
+            });
+        });
         $('#radPayPal').change(function() {
             $('#radTrfBank').removeAttr("checked");
         });
@@ -335,6 +434,11 @@
                 $('#discount-val').html(prefix + ' 0');
                 $('#h-discount').val(0);
                 $('#grandtotal-val').html(prefix + ' {!! $grandtotal !!}');
+            }
+        });
+        $('#radPayPal').change(function() {
+            if(this.checked) {
+                $('#smart-button-container').css('display', 'block');
             }
         });
     });

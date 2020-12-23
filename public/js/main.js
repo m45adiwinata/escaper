@@ -12,9 +12,13 @@ jQuery(document).ready(function($) {
   	$(window).scroll(function() {
   		var st = $(this).scrollTop();
   		if (st > 200) {
+			$('#svgcart').css('color', 'black');
+			$('#cart').css('color', 'black');
   			$('.js-sticky-header').addClass('transparency');
   		} else {
-  			$('.js-sticky-header').removeClass('transparency');
+			$('#svgcart').css('color', 'white');
+			$('#cart').css('color', 'white');
+			$('.js-sticky-header').removeClass('transparency');
   		}
   	}) 
   };
