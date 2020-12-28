@@ -2,8 +2,8 @@
     <div class="container">
     	<div class="row">
     		<div class="col-sm footer-items">
-                <a href="#">Stockist</a>
-                <a href="#">Shipping</a>
+                <a href="/stockist">Stockist</a>
+                <a href="/shipping">Shipping</a>
             </div>
             <div class="col-sm footer-subscribe">
                 <form action="{{route('subscriber.store')}}" method="POST">

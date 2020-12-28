@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row align-items-center">
             <div class="col-xl-2">
-                <h1 class="" id="header-logo"><a href="/home">ESCAPER<sup style="font-size:40%; vertical-align:top; top:7px;">&#174;</sup></a></h1>
+                <a href="/home"><h1 class="" id="header-logo">ESCAPER<sup style="font-size:40%; vertical-align:top; top:7px;">&#174;</sup></h1></a>
             </div>
             <div class="col-xl-10 ">
                 <nav class="site-navigation" role="navigation">

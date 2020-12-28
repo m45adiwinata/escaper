@@ -138,6 +138,7 @@
                             <label for="inputNotes"><b>Order notes (optional)</b></label>
                             <textarea class="form-control" id="inputNotes" rows="4" name="notes"></textarea>
                         </div>
+                        <input type="hidden" id="h-grandtotal" value="0">
                         <input type="hidden" name="discount" id="h-discount" value="0">
                         <input type="hidden" name="shipping" id="h-shipping" value="0">
                     </div>
@@ -251,7 +252,7 @@
 @include('components.footer')
 @endsection
 @section('script')
-<script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD" data-sdk-integration-source="button-factory"></script>
+<script src="https://www.paypal.com/sdk/js?client-id=AS4RC9ACUJEUfAZHnPyiq4chJcOGzclOslQX9SBaFeHi9stA5zBOnshRWiJiZHPt3VvZ8T9Q7SNWLBjg" data-sdk-integration-source="button-factory"></script>
 <script>
     // var req = unirest("GET", "https://www.universal-tutorial.com/api/countries/");
     // req.headers({
@@ -268,8 +269,9 @@
                 label: 'paypal',
             },
             createOrder: function(data, actions) {
+                var bill = $('#h-grandtotal').val();
                 return actions.order.create({
-                    purchase_units: [{"amount":{"currency_code":"USD","value":12}}]
+                    purchase_units: [{"amount":{"currency_code":"USD","value":bill}}]
                 });
             },
             onApprove: function(data, actions) {
@@ -314,6 +316,7 @@
         return "";
     }
     $(document).ready(function() {
+        $('#h-grandtotal').val({!! $grandtotal !!});
         $.ajax({
             url: "https://www.universal-tutorial.com/api/countries/",
             type: "GET",
@@ -324,7 +327,6 @@
             },
             contentType: 'application/json; charset=utf-8',
             success: function(result) { 
-                // console.log(result);
                 result.forEach(country => {
                     $('#selectCountry').append('<option value="'+country.country_name+'">'+country.country_name+'</option>');
                 });
@@ -382,9 +384,11 @@
         });
         $('#radPayPal').change(function() {
             $('#radTrfBank').removeAttr("checked");
+            $('#smart-button-container').css('display', 'block');
         });
         $('#radTrfBank').change(function() {
             $('#radPayPal').removeAttr("checked");
+            $('#smart-button-container').css('display', 'none');
         });
         $('#showlogin').click(function() {
             $('#login').css('display', 'block');
@@ -398,22 +402,29 @@
                     $('#create-password').css('display', 'block');
                     $.get('/cart/check-discount/'+$('#inputEmail').val(), function(count) {
                         if(count == 0) {
-                            subtotal = {!! $subtotal !!};
-                            grandtotal = {!! $grandtotal !!};
-                            discount = subtotal / 10;
-                            $('#h-discount').val(discount);
-                            currency = getCookie('currency');
-                            if(currency == 'IDR') {
-                                prefix = 'Rp';
-                            }
-                            else {
-                                prefix = '$';
-                            }
-                            discount_str = formatRupiah(discount, prefix);
-                            $('#discount-val').html(discount_str);
-                            grandtotal -= discount;
-                            grandtotal_str = formatRupiah(grandtotal, prefix);
-                            $('#grandtotal-val').html(grandtotal_str);
+                            $.post('/cart/update-temp-cart', {
+                                '_token' : $('meta[name=csrf-token]').attr('content'),
+                                discount: 1
+                            })
+                            .success(function() {
+                                subtotal = {!! $subtotal !!};
+                                grandtotal = {!! $grandtotal !!};
+                                discount = subtotal / 10;
+                                $('#h-discount').val(discount);
+                                currency = getCookie('currency');
+                                if(currency == 'IDR') {
+                                    prefix = 'Rp';
+                                }
+                                else {
+                                    prefix = '$';
+                                }
+                                discount_str = formatRupiah(discount, prefix);
+                                $('#discount-val').html(discount_str);
+                                grandtotal -= discount;
+                                grandtotal_str = formatRupiah(grandtotal, prefix);
+                                $('#grandtotal-val').html(grandtotal_str);
+                                $('#h-grandtotal').val(grandtotal);
+                            });
                         }
                     });
                 }
@@ -423,17 +434,24 @@
                 }
             }
             else {
-                $('#create-password').css('display', 'none');
-                currency = getCookie('currency');
-                if(currency == 'IDR') {
-                    prefix = 'Rp';
-                }
-                else {
-                    prefix = '$';
-                }
-                $('#discount-val').html(prefix + ' 0');
-                $('#h-discount').val(0);
-                $('#grandtotal-val').html(prefix + ' {!! $grandtotal !!}');
+                $.post('/cart/update-temp-cart', {
+                    '_token' : $('meta[name=csrf-token]').attr('content'),
+                    discount: 0
+                })
+                .success(function() {
+                    $('#create-password').css('display', 'none');
+                    currency = getCookie('currency');
+                    if(currency == 'IDR') {
+                        prefix = 'Rp';
+                    }
+                    else {
+                        prefix = '$';
+                    }
+                    $('#discount-val').html(prefix + ' 0');
+                    $('#h-discount').val(0);
+                    $('#grandtotal-val').html(prefix + ' {!! $grandtotal !!}');
+                    $('#h-grandtotal').val({!! $grandtotal !!});
+                });
             }
         });
         $('#radPayPal').change(function() {

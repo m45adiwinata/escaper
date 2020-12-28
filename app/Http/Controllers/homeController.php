@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Cart;
 use App\TextBerjalan;
+use App\Stockist;
+use App\Shipping;
 use DateTime;
 
 class homeController extends Controller
@@ -70,5 +72,31 @@ class homeController extends Controller
         }
 
         return redirect('home');
+    }
+
+    public function stockist()
+    {
+        $textberjalan = TextBerjalan::where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'))->orderBy('created_at')->first();
+        if(!$textberjalan) {
+            $data['textberjalan'] = 'text here';
+        }
+        else {
+            $data['textberjalan'] = $textberjalan->text;
+        }
+        $data['stockist'] = Stockist::first();
+        return view('stockist', $data);
+    }
+    
+    public function shipping()
+    {
+        $textberjalan = TextBerjalan::where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'))->orderBy('created_at')->first();
+        if(!$textberjalan) {
+            $data['textberjalan'] = 'text here';
+        }
+        else {
+            $data['textberjalan'] = $textberjalan->text;
+        }
+        $data['shipping'] = Shipping::first();
+        return view('shipping', $data);
     }
 }

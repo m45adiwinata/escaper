@@ -41,11 +41,13 @@ Route::get('/cart/upload-payment/{checkout_id}', 'CartController@uploadPayment')
 Route::post('/cart/post-upload', 'CartController@postUpload');
 Route::get('/send-email', 'ContactController@sendEmail');
 Route::get('/cart/received/{id}', 'CartController@received');
-// Route::get('/test-sending-email', 'CartController@testEmail');
 Route::post('/cart/set-lunas', 'CartController@setLunas')->name('setlunas');
 Route::get('/cart/check-discount/{email}', 'CartController@checkDiscount');
 Route::post('/subscriber/store', 'SubscriberController@store')->name('subscriber.store');
 Route::get('/submitpayment/{checkout_id}', 'CartController@submitPayment');
+Route::post('/cart/update-temp-cart', 'CartController@updateTempCart');
 Route::get('/construction', function () {
     return view('construction');
 });
+Route::get('/stockist', 'HomeController@stockist');
+Route::get('/shipping', 'HomeController@shipping');

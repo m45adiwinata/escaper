@@ -10,6 +10,7 @@ use App\Checkout;
 use App\UserShop;
 use App\Subscriber;
 use App\TextBerjalan;
+use App\TempCart;
 
 class CartController extends Controller
 {
@@ -38,13 +39,16 @@ class CartController extends Controller
     {
         if(isset($_COOKIE['guest_code'])) {
             $data['carts'] = Cart::where('guest_code', $_COOKIE['guest_code'])->where('checkout', 0)->get();
+            $subtotal = 0;
             for ($i=0; $i < count($data['carts']); $i++) {
                 $data['carts'][$i]->avl = ProductAvailability::where('product_id', $data['carts'][$i]->product_id)
                                             ->where('size_init', $data['carts'][$i]->sizeInitial()->first()->initial)->first();
                 if ($_COOKIE['currency'] == 'IDR') {
+                    $subtotal += $data['carts'][$i]->avl->IDR * $data['carts'][$i]->amount;
                     $data['carts'][$i]->total = $data['carts'][$i]->avl->IDR * $data['carts'][$i]->amount;
                 }
                 else {
+                    $subtotal += $data['carts'][$i]->avl->USD * $data['carts'][$i]->amount;
                     $data['carts'][$i]->total = $data['carts'][$i]->avl->USD * $data['carts'][$i]->amount;
                 }
             }
@@ -55,6 +59,26 @@ class CartController extends Controller
             else {
                 $data['textberjalan'] = $textberjalan->text;
             }
+            $grandtotal = $subtotal;
+            if (count(TempCart::where('guest_code', $_COOKIE['guest_code'])->get()) < 1) {
+                $tc = new TempCart;
+                $tc->guest_code = $_COOKIE['guest_code'];
+            }
+            else {
+                $tc = TempCart::where('guest_code', $_COOKIE['guest_code'])->first();
+            }
+            $tc->subtotal = $subtotal;
+            $tc->discount = 0;
+            if ($_COOKIE['currency'] == 'IDR' || ($_COOKIE['currency'] == 'USD' && $subtotal > 150)) {
+                $tc->shipping = 0;
+            }
+            else {
+                $tc->shipping = 15;
+                $grandtotal += 15;
+            }
+            $tc->grandtotal = $grandtotal;
+            $tc->save();
+
             return view('cart.checkout', $data);
         }
 
@@ -63,6 +87,7 @@ class CartController extends Controller
 
     public function placeOrder(Request $request)
     {
+        $tc = TempCart::where('guest_code', $_COOKIE['guest_code'])->first();
         $data = new Checkout;
         $data->guest_code = $_COOKIE['guest_code'];
         $data->currency = $_COOKIE['currency'];
@@ -70,13 +95,14 @@ class CartController extends Controller
         $data->last_name = $request->lastName;
         $data->company = $request->company;
         $data->country = $request->country;
-        $data->address = $request->address;
+        $data->state = $request->state;
         $data->city = $request->city;
+        $data->address = $request->address;
         $data->zipcode = $request->zipcode;
         $data->phone = $request->phone;
         $data->email = $request->email;
-        $data->discount = $request->discount;
-        $data->shipping = $request->shipping;
+        $data->discount = $tc->discount;
+        $data->shipping = $tc->shipping;
         if (isset($request->checkSubscribe)) {
             $data->subscribe = 1;
             if(count(Subscriber::where('email', $data->email)->get()) == 0) {
@@ -93,8 +119,9 @@ class CartController extends Controller
                 $user->last_name = $data->last_name;
                 $user->company = $data->company;
                 $user->country = $data->country;
-                $user->address = $data->address;
+                $user->state = $data->state;
                 $user->city = $data->city;
+                $user->address = $data->address;
                 $user->zipcode = $data->zipcode;
                 $user->phone = $data->phone;
                 $user->email = $data->email;
@@ -117,7 +144,8 @@ class CartController extends Controller
             $temp_payment = 'PayPal';
         }
         $data->save();
-        $sub_total = 0;
+        $sub_total = $tc->subtotal;
+        $grand_total = $tc->grandtotal;
         $carts = array();
         foreach (Cart::where('guest_code', $data->guest_code)->where('checkout', 0)->get() as $key => $d) {
             $cart = array('name' => $d->product()->first()->name, 'qty' => $d->amount, 'price' => 0, 'subtotal' => 0, 'image' => '');
@@ -133,45 +161,42 @@ class CartController extends Controller
                 $cart['price'] = $avl->USD;
                 $cart['subtotal'] = $total;
             }
-            $sub_total += $total;
             array_push($carts, $cart);
         }
         $data->sub_total = $sub_total;
-        $grand_total = $sub_total - $data->discount + $data->shipping;
         $data->grand_total = $grand_total;
         $data->save();
-        Cart::where('guest_code', $data->guest_code)->update(['checkout' => 1]);
-        $temp = array(
-            'email' => $data->email,
-            'first_name' => $data->first_name,
-            'last_name' => $data->last_name,
-            'address' => $data->address,
-            'zipcode' => $data->zipcode,
-            'city' => $data->city,
-            'country' => $data->country,
-            'phone' => $data->phone,
-            'guest_code' => $data->guest_code,
-            'currency' => $data->currency,
-            'sub_total' => $sub_total,
-            'grand_total' => $grand_total,
-            'payment' => $temp_payment,
-            'discount' => $data->discount,
-            'shipping' => $data->shipping,
-            'carts' => $carts,
-            'logo' => env('APP_URL').'/images/LOGO-PNG%20BLACKBG.png'
-        );
-        Mail::send('emailku', $temp, function($message) use ($temp) {
-            $message->to($temp['email']);
-            $message->from('info@escaper-store.com');
-            $message->subject('Purchase '.$temp['guest_code']);
-        });
+        // Cart::where('guest_code', $data->guest_code)->update(['checkout' => 1]);
+        // $temp = array(
+        //     'email' => $data->email,
+        //     'first_name' => $data->first_name,
+        //     'last_name' => $data->last_name,
+        //     'address' => $data->address,
+        //     'zipcode' => $data->zipcode,
+        //     'city' => $data->city,
+        //     'state' => $data->state,
+        //     'country' => $data->country,
+        //     'phone' => $data->phone,
+        //     'guest_code' => $data->guest_code,
+        //     'currency' => $data->currency,
+        //     'sub_total' => $sub_total,
+        //     'grand_total' => $grand_total,
+        //     'payment' => $temp_payment,
+        //     'discount' => $data->discount,
+        //     'shipping' => $data->shipping,
+        //     'carts' => $carts,
+        //     'logo' => env('APP_URL').'/images/LOGO-PNG%20BLACKBG.png'
+        // );
+        // Mail::send('emailku', $temp, function($message) use ($temp) {
+        //     $message->to($temp['email']);
+        //     $message->from('info@escaper-store.com');
+        //     $message->subject('Purchase '.$temp['guest_code']);
+        // });
 
         if ($data->pembayaran == 1) {
             return redirect('/cart/upload-payment/'.$data->id);
         }
-        return redirect('https://www.paypal.me/escaperstore');
-
-        // return redirect('/cart/received/'.$data->id);
+        return redirect('/');
     }
 
     public function uploadPayment($id) {
@@ -238,46 +263,6 @@ class CartController extends Controller
         return redirect('/submitpayment/$request->id');
     }
 
-    // public function testEmail()
-    // {
-    //     $data = Checkout::first();
-    //     $grand_total = 0;
-    //     $carts = array();
-    //     foreach (Cart::where('guest_code', $data->guest_code)->get() as $key => $d) {
-    //         $cart = array('name' => $d->product()->first()->name, 'qty' => $d->amount, 'price' => 0, 'subtotal' => 0, 'image' => '');
-    //         $cart['image'] = $d->product()->first()->image[0];
-    //         $avl = ProductAvailability::where('product_id', $d->product_id)->where('size_init', $d->sizeInitial()->first()->initial)->first();
-    //         if ($d->currency == 'IDR') {
-    //             $total = $avl->IDR * $d->amount;
-    //             $cart['price'] = $avl->IDR;
-    //             $cart['subtotal'] = $total;
-    //         }
-    //         else {
-    //             $total = $avl->USD * $d->amount;
-    //             $cart['price'] = $avl->IDR;
-    //             $cart['subtotal'] = $total;
-    //         }
-    //         $grand_total += $total;
-    //         array_push($carts, $cart);
-    //     }
-        
-    //     $temp = array(
-    //         'email' => $data->email,
-    //         'first_name' => $data->first_name,
-    //         'last_name' => $data->last_name,
-    //         'guest_code' => $data->guest_code,
-    //         'currency' => $data->currency,
-    //         'grand_total' => $grand_total,
-    //         'carts' => $carts
-    //     );
-        
-    //     Mail::send('emailku', $temp, function($message) use ($temp) {
-    //         $message->to('m45adiwinata@gmail.com');
-    //         $message->from('info@escaper-store.com');
-    //         $message->subject('Purchase '.$temp['guest_code']);
-    //     });
-    // }
-
     public function changeAmt()
     {
         Cart::where('id', $_GET['cart_id'])->update(['amount' => $_GET['qty']]);
@@ -326,5 +311,21 @@ class CartController extends Controller
     {
         $count = count(UserShop::where('email', $email)->get());
         return $count;
+    }
+
+    public function updateTempCart(Request $request)
+    {
+        $tc = TempCart::where('guest_code', $_COOKIE['guest_code'])->first();
+        if ($request->discount == 1) {
+            $discount = $tc->subtotal * 10 / 100;
+            $tc->subtotal -= $discount;
+            $tc->discount = $discount;
+        }
+        else {
+            $tc->subtotal += $tc->discount;
+            $tc->discount = 0;
+        }
+        $tc->grandtotal = $tc->subtotal + $tc->shipping;
+        $tc->save();
     }
 }
