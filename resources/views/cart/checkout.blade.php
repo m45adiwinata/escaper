@@ -317,12 +317,28 @@
     }
     $(document).ready(function() {
         $('#h-grandtotal').val({!! $grandtotal !!});
+        // $.ajax({
+        //     url:'https://www.universal-tutorial.com/api/getaccesstoken', 
+        //     type: "GET",
+        //     dataType: 'json',
+        //     headers:
+        //     {
+        //         "Accept": "application/json",
+        //         "api-token": "brooWpJXcwCVMd_VcEmwf-9V7PiwSJxo_M81ppmVYgFPckBiJj3xGRzA4bIIDxlQuhI",
+        //         "user-email": "m45adiwinata@gmail.com"
+        //     },
+        //     contentType: 'application/json; charset=utf-8',
+        //     success: function(data) {
+        //     $('#inputCompany').val(data.auth_token);
+        //     },
+        //     error: function (error) {   console.log(error); }
+        // });
         $.ajax({
             url: "https://www.universal-tutorial.com/api/countries/",
             type: "GET",
             dataType: 'json',
             headers: {
-                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJtNDVhZGl3aW5hdGFAZ21haWwuY29tIiwiYXBpX3Rva2VuIjoiYnJvb1dwSlhjd0NWTWRfVmNFbXdmLTlWN1Bpd1NKeG9fTTgxcHBtVllnRlBja0JpSmozeEdSekE0YklJRHhsUXVoSSJ9LCJleHAiOjE2MDg3NDc5ODN9.gGUuP_H0e6n98mQDGWYPt0ugPsQKXgXJ9gPPifjMS6k",
+                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJtNDVhZGl3aW5hdGFAZ21haWwuY29tIiwiYXBpX3Rva2VuIjoiYnJvb1dwSlhjd0NWTWRfVmNFbXdmLTlWN1Bpd1NKeG9fTTgxcHBtVllnRlBja0JpSmozeEdSekE0YklJRHhsUXVoSSJ9LCJleHAiOjE2MDkzNTE2MjF9.doSRqAoS8bMKcP0f4GaJAStOZdMUDJZnkqFGR2wsmMs",
                 "Accept": "application/json"
             },
             contentType: 'application/json; charset=utf-8',
@@ -350,7 +366,7 @@
                 type: "GET",
                 dataType: 'json',
                 headers: {
-                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJtNDVhZGl3aW5hdGFAZ21haWwuY29tIiwiYXBpX3Rva2VuIjoiYnJvb1dwSlhjd0NWTWRfVmNFbXdmLTlWN1Bpd1NKeG9fTTgxcHBtVllnRlBja0JpSmozeEdSekE0YklJRHhsUXVoSSJ9LCJleHAiOjE2MDg3NDc5ODN9.gGUuP_H0e6n98mQDGWYPt0ugPsQKXgXJ9gPPifjMS6k",
+                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJtNDVhZGl3aW5hdGFAZ21haWwuY29tIiwiYXBpX3Rva2VuIjoiYnJvb1dwSlhjd0NWTWRfVmNFbXdmLTlWN1Bpd1NKeG9fTTgxcHBtVllnRlBja0JpSmozeEdSekE0YklJRHhsUXVoSSJ9LCJleHAiOjE2MDkzNTE2MjF9.doSRqAoS8bMKcP0f4GaJAStOZdMUDJZnkqFGR2wsmMs",
                     "Accept": "application/json"
                 },
                 contentType: 'application/json; charset=utf-8',
@@ -370,7 +386,7 @@
                 type: "GET",
                 dataType: 'json',
                 headers: {
-                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJtNDVhZGl3aW5hdGFAZ21haWwuY29tIiwiYXBpX3Rva2VuIjoiYnJvb1dwSlhjd0NWTWRfVmNFbXdmLTlWN1Bpd1NKeG9fTTgxcHBtVllnRlBja0JpSmozeEdSekE0YklJRHhsUXVoSSJ9LCJleHAiOjE2MDg3NDc5ODN9.gGUuP_H0e6n98mQDGWYPt0ugPsQKXgXJ9gPPifjMS6k",
+                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJtNDVhZGl3aW5hdGFAZ21haWwuY29tIiwiYXBpX3Rva2VuIjoiYnJvb1dwSlhjd0NWTWRfVmNFbXdmLTlWN1Bpd1NKeG9fTTgxcHBtVllnRlBja0JpSmozeEdSekE0YklJRHhsUXVoSSJ9LCJleHAiOjE2MDkzNTE2MjF9.doSRqAoS8bMKcP0f4GaJAStOZdMUDJZnkqFGR2wsmMs",
                     "Accept": "application/json"
                 },
                 contentType: 'application/json; charset=utf-8',

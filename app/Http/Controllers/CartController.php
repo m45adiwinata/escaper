@@ -328,4 +328,10 @@ class CartController extends Controller
         $tc->grandtotal = $tc->subtotal + $tc->shipping;
         $tc->save();
     }
+
+    public function checkStockItem($product_id, $size_init)
+    {
+        $data = ProductAvailability::where('product_id', $product_id)->where('size_init', $size_init)->first();
+        return $data->stocks;
+    }
 }

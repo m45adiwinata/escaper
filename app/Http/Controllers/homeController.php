@@ -36,12 +36,17 @@ class homeController extends Controller
         if (!isset($_COOKIE['guest_code'])) {
             return redirect('/');
         }
-        $textberjalan = TextBerjalan::where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'))->orderBy('created_at')->first();
-        if(!$textberjalan) {
+        $textberjalan = TextBerjalan::where('currency', $_COOKIE['currency'])->where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'))->orderBy('created_at')->get();
+        if(count($textberjalan) == 0) {
             $data['textberjalan'] = 'text here';
         }
         else {
-            $data['textberjalan'] = $textberjalan->text;
+            $text = '';
+            foreach ($textberjalan as $key => $tb) {
+                $text .= $tb->text;
+                $text .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+            }
+            $data['textberjalan'] = $text;
         }
         return view('homepage', $data);
     }

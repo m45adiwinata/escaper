@@ -28,6 +28,7 @@ class TextBerjalanController extends AdminController
 
         $grid->column('id', __('Id'));
         $grid->column('text', __('Text'));
+        $grid->column('currency', __('Currency'));
         $grid->column('start_date', __('Start date'));
         $grid->column('end_date', __('End date'));
         $grid->column('created_at', __('Created at'));
@@ -48,6 +49,7 @@ class TextBerjalanController extends AdminController
 
         $show->field('id', __('Id'));
         $show->field('text', __('Text'));
+        $show->field('currency', __('Currency'));
         $show->field('start_date', __('Start date'));
         $show->field('end_date', __('End date'));
         $show->field('created_at', __('Created at'));
@@ -66,6 +68,7 @@ class TextBerjalanController extends AdminController
         $form = new Form(new TextBerjalan());
 
         $form->textarea('text', __('Text'));
+        $form->select('currency', __('currency'))->options(['IDR' => 'IDR', 'USD' => 'USD']);
         $form->date('start_date', __('Start date'))->default(date('Y-m-d'));
         $form->date('end_date', __('End date'))->default(date('Y-m-d'));
 

@@ -7,11 +7,9 @@
 <div class="product">
 	<div class="container">
     <div class="shop-header">
-      <div class="container border-0" style="display:none;" id="notification">
-        <div class="row" style="border:1px solid black; padding:5px;">
-          <div class="col-sm-9 pt-1">&#10003 "{{$product->name}}" has been added to your cart.</div>
-          <div class="col-sm-3 text-right"><a class="btn btn-success text-light" style="background:black;" href="/cart">VIEW CART</a></div>
-        </div>
+      <div class="row" style="border:1px solid black; padding:5px; display:none;" id="notification">
+        <div class="col-sm-9 pt-1">&#10003 "{{$product->name}}" has been added to your cart.</div>
+        <div class="col-sm-3 text-right"><a class="btn btn-success text-light" style="background:black;" href="/cart">VIEW CART</a></div>
       </div>
       <p>{{strtoupper($product->type()->first()->name)}}</p>
     </div>

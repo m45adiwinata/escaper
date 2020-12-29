@@ -1,5 +1,5 @@
 <header>
-    <nav class="home-nav" id="navigation">
+    <nav class="home-nav2" id="navigation">
         <marquee direction="left">
             {{$textberjalan}}
         </marquee>

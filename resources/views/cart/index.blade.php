@@ -116,13 +116,13 @@
         </div>
         <div class="row" id="emptycart" style="display:none;">
             <div class="col-md-12">
-                Your cart is empty. <a href="/shop">back to shop</a>
+                Your cart is currently empty. <a href="/shop">back to shop.</a>
             </div>
         </div>
         @else
         <div class="row">
             <div class="col-md-12">
-                Your cart is empty. <a href="/shop">back to shop</a>
+                Your cart is currently empty. <a href="/shop">back to shop.</a>
             </div>
         </div>
         @endif
@@ -149,24 +149,26 @@
             $.get('/cart/get-grand-total', function(grandtotal) {
                 $('#grandtotal').html(grandtotal);
                 $('#subtotal').html(grandtotal);
-            });
-            $.get('/cart-check', function(data) {
-                console.log(data.count);
-                if (data.count > 0) {
-                    // $('#cart').css('color', 'white');
-                    $('#cart-black').html(data.count);
-                    // $('#cart-items').empty();
-                    // for (var i=0; i<data.count; i++) {
-                    //     $('#cart-items').append('<li>'+data.items[i].product_name+' '+data.items[i].amount+'</li>');
-                    // }
-                }
-                else {
-                    // $('#cart').css('color', 'black');
-                    $('#cart-black').html('0');
-                    // $('#cart-items').empty();
-                    // $('#contained').css('display', 'none');
-                    // $('#emptycart').css('display', 'block');
-                }
+                $.get('/cart-check', function(data) {
+                    if (data.count > 0) {
+                        console.log('none');
+                        // $('#cart').css('color', 'white');
+                        $('#cart-black').html(data.count);
+                        // $('#cart-items').empty();
+                        // for (var i=0; i<data.count; i++) {
+                        //     $('#cart-items').append('<li>'+data.items[i].product_name+' '+data.items[i].amount+'</li>');
+                        // }
+                        $('#contained').css('display', 'none');
+                        $('#emptycart').css('display', 'block');
+                    }
+                    else {
+                        // $('#cart').css('color', 'black');
+                        $('#cart-black').html('0');
+                        // $('#cart-items').empty();
+                        // $('#contained').css('display', 'none');
+                        // $('#emptycart').css('display', 'block');
+                    }
+                });
             });
         });
     }

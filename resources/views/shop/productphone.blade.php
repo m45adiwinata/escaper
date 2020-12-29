@@ -51,7 +51,7 @@
                                 <label for="item-quantity">Quantity</label>
                                 <input class="item-spinner" type="number" value="1" min="1" max="{{$product->stocks}}">
                             </div>
-                            <a class="btn-add-cart">Add to Cart</a>
+                            <a class="btn-add-cart" id="btn-add-cart">Add to Cart</a>
                         </div>
                     </div>
                 </div>
@@ -86,5 +86,20 @@
         groupClass: "item-spinner",
         buttonsClass: "btn-spinner",
     });
+    $('#btn-add-cart').click(function() {
+        $([document.documentElement, document.body]).animate({
+            scrollTop: $("#elementtoScrollToID").offset().top
+        }, 200);
+        $.get('/add-to-cart/' + {!! $product->id !!} + '/' + $('#inputGroupSelect01').val() + '/' + $('#qty').val(), function(response) {
+            // $.get('/cart-check', function(data) {
+            //     if (data.count > 0) {
+            //         $('#cart').html(data.count);
+            //         $('#cart-black').html(data.count);
+            //         $('#notification').css('display', 'block');
+            //     }
+            // });
+        });
+    });
+    
 </script>
 @endsection
