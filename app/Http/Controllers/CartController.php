@@ -196,7 +196,7 @@ class CartController extends Controller
         if ($data->pembayaran == 1) {
             return redirect('/cart/upload-payment/'.$data->id);
         }
-        return redirect('/');
+        return redirect('/home');
     }
 
     public function uploadPayment($id) {

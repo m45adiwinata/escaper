@@ -8,6 +8,7 @@ use App\Mail\EscaperEmail;
 use App\ViewContact;
 use App\Checkout;
 use App\TextBerjalan;
+use App\Comment;
 
 class contactController extends Controller
 {
@@ -43,5 +44,17 @@ class contactController extends Controller
         
         $data = Checkout::first();
         return view('emailku', $data);
+    }
+
+    public function sendComment(Request $request)
+    {
+        $data = new Comment;
+        $data->name = $request->name;
+        $data->email = $request->email;
+        $data->phone = $request->phone;
+        $data->comment = $request->comment;
+        $data->save();
+        
+        return redirect('/home');
     }
 }

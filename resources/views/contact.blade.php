@@ -13,11 +13,12 @@
                 </div>
                 <div class="col-md-6">
                     <div class="contact-form">
-                        <form action="" class="contact">
-                            <input type="text" class="contact-name" placeholder="NAME*" required>
-                            <input type="email" class="contact-email" placeholder="EMAIL*" required>
-                            <input type="number" pattern="[0-9]" class="contact-phone" placeholder="PHONE">
-                            <textarea rows="15" name="comment" id="" placeholder="COMMENT"></textarea>
+                        <form action="{{route('contact.comment')}}" method="POST" class="contact">
+                            @csrf
+                            <input type="text" name="name" class="contact-name" placeholder="NAME*" required>
+                            <input type="email" name="email" class="contact-email" placeholder="EMAIL*" required>
+                            <input type="number" name="phone" pattern="[0-9]" class="contact-phone" placeholder="PHONE">
+                            <textarea name="comment" rows="15" name="comment" id="" placeholder="COMMENT"></textarea>
                             <span style="font-size:10px;">*Required</span>
                             <button type="submit" class="btn-contact">SUBMIT</button>
                         </form>
