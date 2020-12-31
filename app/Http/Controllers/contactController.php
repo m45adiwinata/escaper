@@ -48,6 +48,11 @@ class contactController extends Controller
 
     public function sendComment(Request $request)
     {
+        $this->validate($request, [
+            'name' => 'required',
+            'email' => 'required',
+            'comment' => 'required'
+        ]);
         $data = new Comment;
         $data->name = $request->name;
         $data->email = $request->email;
