@@ -52,12 +52,17 @@ class CartController extends Controller
                     $data['carts'][$i]->total = $data['carts'][$i]->avl->USD * $data['carts'][$i]->amount;
                 }
             }
-            $textberjalan = TextBerjalan::where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'))->orderBy('created_at')->first();
-            if(!$textberjalan) {
+            $textberjalan = TextBerjalan::where('currency', $_COOKIE['currency'])->where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'))->orderBy('created_at')->get();
+            if(count($textberjalan) == 0) {
                 $data['textberjalan'] = 'text here';
             }
             else {
-                $data['textberjalan'] = $textberjalan->text;
+                $text = '';
+                foreach ($textberjalan as $key => $tb) {
+                    $text .= $tb->text;
+                    $text .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                }
+                $data['textberjalan'] = $text;
             }
             $grandtotal = $subtotal;
             if (count(TempCart::where('guest_code', $_COOKIE['guest_code'])->get()) < 1) {
@@ -201,7 +206,18 @@ class CartController extends Controller
 
     public function uploadPayment($id) {
         $data['checkout'] = Checkout::find($id);
-        $data['textberjalan'] = TextBerjalan::where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'))->orderBy('created_at')->first();
+        $textberjalan = TextBerjalan::where('currency', $_COOKIE['currency'])->where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'))->orderBy('created_at')->get();
+        if(count($textberjalan) == 0) {
+            $data['textberjalan'] = 'text here';
+        }
+        else {
+            $text = '';
+            foreach ($textberjalan as $key => $tb) {
+                $text .= $tb->text;
+                $text .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+            }
+            $data['textberjalan'] = $text;
+        }
         return view('upload', $data);
     }
 
