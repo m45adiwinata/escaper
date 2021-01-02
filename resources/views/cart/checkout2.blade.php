@@ -77,16 +77,16 @@
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="inputFirstName"><b>First Name</b></label>
-                                <input type="text" class="form-control" name="firstName" id="inputFirstName" placeholder="">
+                                <input type="text" class="form-control" name="firstName" id="inputFirstName" placeholder="" value="{{$user->first_name}}">
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="inputLastName"><b>Last Name (optional)</b></label>
-                                <input type="text" class="form-control" name="lastName" id="inputLastName" placeholder="">
+                                <input type="text" class="form-control" name="lastName" id="inputLastName" placeholder="" value="{{$user->last_name}}">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="inputCompany"><b>Company/Organization (optional)</b></label>
-                            <input type="text" class="form-control" name="company" id="inputCompany" placeholder="">
+                            <input type="text" class="form-control" name="company" id="inputCompany" placeholder="" value="{{$user->company}}">
                         </div>
                         <div class="form-group">
                             <label for="selectCountry"><b>Country *</b></label>
@@ -102,19 +102,19 @@
                         </div>
                         <div class="form-group">
                             <label for="inputAddress"><b>Address *</b></label>
-                            <input type="text" class="form-control" id="inputAddress" placeholder="" name="address">
+                            <input type="text" class="form-control" id="inputAddress" placeholder="" name="address" value="{{$user->address}}">
                         </div>
                         <div class="form-group">
                             <label for="inputZipCode"><b>Zip Code (optional)</b></label>
-                            <input type="text" class="form-control" id="inputZipCode" placeholder="" name="zipcode">
+                            <input type="text" class="form-control" id="inputZipCode" placeholder="" name="zipcode" value="{{$user->zipcode}}">
                         </div>
                         <div class="form-group">
                             <label for="inputPhone"><b>Phone *</b></label>
-                            <input type="text" class="form-control" id="inputPhone" placeholder="" name="phone">
+                            <input type="text" class="form-control" id="inputPhone" placeholder="" name="phone" value="{{$user->phone}}">
                         </div>
                         <div class="form-group">
                             <label for="inputEmail"><b>Email address *</b></label>
-                            <input type="email" class="form-control" id="inputEmail" placeholder="" name="email">
+                            <input type="email" class="form-control" id="inputEmail" placeholder="" name="email" value="{{$user->email}}">
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" value="subscribe" id="checkSubscribe" name="checkSubscribe" checked>
@@ -254,6 +254,7 @@
 @section('script')
 <script src="https://www.paypal.com/sdk/js?client-id=AS4RC9ACUJEUfAZHnPyiq4chJcOGzclOslQX9SBaFeHi9stA5zBOnshRWiJiZHPt3VvZ8T9Q7SNWLBjg" data-sdk-integration-source="button-factory"></script>
 <script>
+    var user = {!! $user !!};
     // var req = unirest("GET", "https://www.universal-tutorial.com/api/countries/");
     // req.headers({
     //     "Accept": "application/json",
@@ -346,6 +347,7 @@
                 result.forEach(country => {
                     $('#selectCountry').append('<option value="'+country.country_name+'">'+country.country_name+'</option>');
                 });
+                $('#selectCountry').val(user.country).trigger('change');
             },
             error: function (error) {   console.log(error); }
         });
@@ -374,6 +376,7 @@
                     result.forEach(state => {
                         $('#selectState').append('<option value="'+state.state_name+'">'+state.state_name+'</option>');
                     });
+                    $('#selectState').val(user.state).trigger('change');
                 },
                 error: function (error) {   console.log(error); }
             });
@@ -394,10 +397,12 @@
                     result.forEach(city => {
                         $('#selectCity').append('<option value="'+city.city_name+'">'+city.city_name+'</option>');
                     });
+                    $('#selectCity').val(user.city).trigger('change');
                 },
                 error: function (error) {   console.log(error); }
             });
         });
+        
         $('#radPayPal').change(function() {
             $('#radTrfBank').removeAttr("checked");
             $('#smart-button-container').css('display', 'block');

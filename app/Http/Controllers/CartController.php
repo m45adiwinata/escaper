@@ -334,4 +334,57 @@ class CartController extends Controller
         $data = ProductAvailability::where('product_id', $product_id)->where('size_init', $size_init)->first();
         return $data->stocks;
     }
+
+    public function checkoutLogin(Request $request)
+    {
+        $this->validate($request, [
+            'username' => 'required',
+			'password' => 'required'
+        ]);
+        $data['carts'] = Cart::where('guest_code', $_COOKIE['guest_code'])->where('checkout', 0)->get();
+        $subtotal = 0;
+        for ($i=0; $i < count($data['carts']); $i++) {
+            $data['carts'][$i]->avl = ProductAvailability::where('product_id', $data['carts'][$i]->product_id)
+                                        ->where('size_init', $data['carts'][$i]->sizeInitial()->first()->initial)->first();
+            if ($_COOKIE['currency'] == 'IDR') {
+                $subtotal += $data['carts'][$i]->avl->IDR * $data['carts'][$i]->amount;
+                $data['carts'][$i]->total = $data['carts'][$i]->avl->IDR * $data['carts'][$i]->amount;
+            }
+            else {
+                $subtotal += $data['carts'][$i]->avl->USD * $data['carts'][$i]->amount;
+                $data['carts'][$i]->total = $data['carts'][$i]->avl->USD * $data['carts'][$i]->amount;
+            }
+        }
+        $textberjalan = TextBerjalan::where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'))->orderBy('created_at')->first();
+        if(!$textberjalan) {
+            $data['textberjalan'] = 'text here';
+        }
+        else {
+            $data['textberjalan'] = $textberjalan->text;
+        }
+        $grandtotal = $subtotal;
+        if (count(TempCart::where('guest_code', $_COOKIE['guest_code'])->get()) < 1) {
+            $tc = new TempCart;
+            $tc->guest_code = $_COOKIE['guest_code'];
+        }
+        else {
+            $tc = TempCart::where('guest_code', $_COOKIE['guest_code'])->first();
+        }
+        $tc->subtotal = $subtotal;
+        $tc->discount = 0;
+        if ($_COOKIE['currency'] == 'IDR' || ($_COOKIE['currency'] == 'USD' && $subtotal > 150)) {
+            $tc->shipping = 0;
+        }
+        else {
+            $tc->shipping = 15;
+            $grandtotal += 15;
+        }
+        $tc->grandtotal = $grandtotal;
+        $tc->save();
+        $data['user'] = UserShop::where('email', $request->username)->first();
+        if (md5($request->password) == $data['user']->password) {
+            return view('cart.checkout2', $data);
+        }
+        return redirect('/cart/checkout');
+    }
 }

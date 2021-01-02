@@ -25,6 +25,7 @@ Route::get('/home', 'homeController@index');
 Route::post('/welcome', 'homeController@welcome');
 Route::get('/about', 'aboutController@index');
 Route::get('/contact', 'contactController@index');
+Route::post('/contact/send-comment', 'contactController@sendComment')->name('contact.comment');
 Route::get('/shop', 'shopController@index');
 Route::get('/lookbook', 'lookbookController@index');
 Route::get('/product', 'shopController@product');
@@ -46,6 +47,8 @@ Route::get('/cart/check-discount/{email}', 'CartController@checkDiscount');
 Route::post('/subscriber/store', 'SubscriberController@store')->name('subscriber.store');
 Route::get('/submitpayment/{checkout_id}', 'CartController@submitPayment');
 Route::post('/cart/update-temp-cart', 'CartController@updateTempCart');
+Route::get('/cart/check-stock-item/{product_id}/{size_init}', 'CartController@checkStockItem');
+Route::post('/cart/checkout/login', 'CartController@checkoutLogin');
 Route::get('/construction', function () {
     return view('construction');
 });
