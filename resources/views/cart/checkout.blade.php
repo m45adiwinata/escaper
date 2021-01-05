@@ -260,6 +260,7 @@
     //     "api-token": "brooWpJXcwCVMd_VcEmwf-9V7PiwSJxo_M81ppmVYgFPckBiJj3xGRzA4bIIDxlQuhI",
     //     "user-email": "m45adiwinata@gmail.com"
     // });
+    var provinsis = [];
     function initPayPalButton() {
         paypal.Buttons({
             style: {
@@ -338,7 +339,7 @@
             type: "GET",
             dataType: 'json',
             headers: {
-                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJtNDVhZGl3aW5hdGFAZ21haWwuY29tIiwiYXBpX3Rva2VuIjoiYnJvb1dwSlhjd0NWTWRfVmNFbXdmLTlWN1Bpd1NKeG9fTTgxcHBtVllnRlBja0JpSmozeEdSekE0YklJRHhsUXVoSSJ9LCJleHAiOjE2MDk1OTQ5MjN9.bdeomNMmojKfJzMFAzdr6Q9KEZrT4l7kHpPt_sJsYXY",
+                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJtNDVhZGl3aW5hdGFAZ21haWwuY29tIiwiYXBpX3Rva2VuIjoiYnJvb1dwSlhjd0NWTWRfVmNFbXdmLTlWN1Bpd1NKeG9fTTgxcHBtVllnRlBja0JpSmozeEdSekE0YklJRHhsUXVoSSJ9LCJleHAiOjE2MDk5NDQ5ODJ9.dsxGrsd27mWKGuqjlFSUADfojRcJQeygm-fQzZDkH0Y",
                 "Accept": "application/json"
             },
             contentType: 'application/json; charset=utf-8',
@@ -359,44 +360,72 @@
         $('#selectState').select2();
         $('#selectCity').select2();
         $('#selectCountry').change(function() {
-            $('#selectState').empty().append('<option value="" selected="selected" disabled></option>');
-            var country = $(this).select2('data')[0].id;
-            $.ajax({
-                url: "https://www.universal-tutorial.com/api/states/"+country,
-                type: "GET",
-                dataType: 'json',
-                headers: {
-                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJtNDVhZGl3aW5hdGFAZ21haWwuY29tIiwiYXBpX3Rva2VuIjoiYnJvb1dwSlhjd0NWTWRfVmNFbXdmLTlWN1Bpd1NKeG9fTTgxcHBtVllnRlBja0JpSmozeEdSekE0YklJRHhsUXVoSSJ9LCJleHAiOjE2MDk1OTQ5MjN9.bdeomNMmojKfJzMFAzdr6Q9KEZrT4l7kHpPt_sJsYXY",
-                    "Accept": "application/json"
-                },
-                contentType: 'application/json; charset=utf-8',
-                success: function(result) { 
-                    result.forEach(state => {
-                        $('#selectState').append('<option value="'+state.state_name+'">'+state.state_name+'</option>');
+            if($(this).val() == 'Indonesia') {
+                $('#selectState').empty().append('<option value="" selected="selected" disabled></option>');
+                $.get("https://dev.farizdotid.com/api/daerahindonesia/provinsi", function(data) {
+                    provinsis = data.provinsi;
+                    data.provinsi.forEach(d => {
+                        $('#selectState').append('<option value="'+d.nama+'">'+d.nama+'</option>');
                     });
-                },
-                error: function (error) {   console.log(error); }
-            });
+                    console.log("hello");
+                });
+            }
+            else {
+                $('#selectState').empty().append('<option value="" selected="selected" disabled></option>');
+                var country = $(this).select2('data')[0].id;
+                $.ajax({
+                    url: "https://www.universal-tutorial.com/api/states/"+country,
+                    type: "GET",
+                    dataType: 'json',
+                    headers: {
+                        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJtNDVhZGl3aW5hdGFAZ21haWwuY29tIiwiYXBpX3Rva2VuIjoiYnJvb1dwSlhjd0NWTWRfVmNFbXdmLTlWN1Bpd1NKeG9fTTgxcHBtVllnRlBja0JpSmozeEdSekE0YklJRHhsUXVoSSJ9LCJleHAiOjE2MDk5NDQ5ODJ9.dsxGrsd27mWKGuqjlFSUADfojRcJQeygm-fQzZDkH0Y",
+                        "Accept": "application/json"
+                    },
+                    contentType: 'application/json; charset=utf-8',
+                    success: function(result) { 
+                        result.forEach(state => {
+                            $('#selectState').append('<option value="'+state.state_name+'">'+state.state_name+'</option>');
+                        });
+                    },
+                    error: function (error) {   console.log(error); }
+                });
+            }
         });
         $('#selectState').change(function() {
-            $('#selectCity').empty().append('<option value="" selected="selected" disabled></option>');
-            var state = $(this).select2('data')[0].id;
-            $.ajax({
-                url: "https://www.universal-tutorial.com/api/cities/"+state,
-                type: "GET",
-                dataType: 'json',
-                headers: {
-                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJtNDVhZGl3aW5hdGFAZ21haWwuY29tIiwiYXBpX3Rva2VuIjoiYnJvb1dwSlhjd0NWTWRfVmNFbXdmLTlWN1Bpd1NKeG9fTTgxcHBtVllnRlBja0JpSmozeEdSekE0YklJRHhsUXVoSSJ9LCJleHAiOjE2MDk1OTQ5MjN9.bdeomNMmojKfJzMFAzdr6Q9KEZrT4l7kHpPt_sJsYXY",
-                    "Accept": "application/json"
-                },
-                contentType: 'application/json; charset=utf-8',
-                success: function(result) { 
-                    result.forEach(city => {
-                        $('#selectCity').append('<option value="'+city.city_name+'">'+city.city_name+'</option>');
+            if($('#selectCountry').val() == 'Indonesia') {
+                $('#selectCity').empty().append('<option value="" selected="selected" disabled></option>');
+                var idprovinsi = -1;
+                provinsis.forEach(p => {
+                    if(p.nama == $('#selectState').val()) {
+                        idprovinsi = p.id;
+                    }
+                });
+                $.get("https://dev.farizdotid.com/api/daerahindonesia/kota?id_provinsi=" + idprovinsi, function(data) {
+                    data.kota_kabupaten.forEach(k => {
+                        $('#selectCity').append('<option value="'+k.nama+'">'+k.nama+'</option>');
                     });
-                },
-                error: function (error) {   console.log(error); }
-            });
+                });
+            }
+            else {
+                $('#selectCity').empty().append('<option value="" selected="selected" disabled></option>');
+                var state = $(this).select2('data')[0].id;
+                $.ajax({
+                    url: "https://www.universal-tutorial.com/api/cities/"+state,
+                    type: "GET",
+                    dataType: 'json',
+                    headers: {
+                        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJtNDVhZGl3aW5hdGFAZ21haWwuY29tIiwiYXBpX3Rva2VuIjoiYnJvb1dwSlhjd0NWTWRfVmNFbXdmLTlWN1Bpd1NKeG9fTTgxcHBtVllnRlBja0JpSmozeEdSekE0YklJRHhsUXVoSSJ9LCJleHAiOjE2MDk5NDQ5ODJ9.dsxGrsd27mWKGuqjlFSUADfojRcJQeygm-fQzZDkH0Y",
+                        "Accept": "application/json"
+                    },
+                    contentType: 'application/json; charset=utf-8',
+                    success: function(result) { 
+                        result.forEach(city => {
+                            $('#selectCity').append('<option value="'+city.city_name+'">'+city.city_name+'</option>');
+                        });
+                    },
+                    error: function (error) {   console.log(error); }
+                });
+            }
         });
         $('#radPayPal').change(function() {
             $('#radTrfBank').removeAttr("checked");
