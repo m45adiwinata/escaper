@@ -1,6 +1,6 @@
 @extends('layouts.phone')
 @section('content')
-@include('components.headerphone')
+@include('components.headerphone2')
 <section>
     <div class="container-lg">
         <div class="item-wrapper">

@@ -20,6 +20,9 @@ Route::get('/', function () {
     // return redirect('/home');
     return view('currency');
 });
+Route::get('/fblogin', function() {
+    return view('fblogin');
+});
 
 Route::get('/home', 'homeController@index');
 Route::post('/welcome', 'homeController@welcome');
