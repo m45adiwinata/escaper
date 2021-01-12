@@ -69,7 +69,7 @@
         <div class="row">
             <div class="col-sm-12"><h4>BILLING & SHIPPING</h4></div>
         </div>
-        <form action="/cart/place-order" method="POST">
+        <form action="/cart/place-order" method="POST" id="main-checkout-form">
             @csrf
             <div class="container">
                 <div class="row">
@@ -96,9 +96,13 @@
                             <label for="selectState"><b>State/Province *</b></label>
                             <select class="form-control" id="selectState" name="state"><option value="" selected="selected" disabled></option></select>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" style="display:none;" id="inputCitySelect">
                             <label for="selectCity"><b>City *</b></label>
                             <select class="form-control" id="selectCity" name="city"><option value="" selected="selected" disabled></option></select>
+                        </div>
+                        <div class="form-group" id="inputCityText">
+                            <label for="inputCity"><b>City *</b></label>
+                            <input type="text" class="form-control" name="citytext" id="inputCity" placeholder="">
                         </div>
                         <div class="form-group" style="display:none;" id="inputKec">
                             <label for="selectKec"><b>Kecamatan *</b></label>
@@ -247,7 +251,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><button type="submit" class="btn btn-primary">PLACE ORDER</button></td>
+                                    <td><button type="submit" class="btn btn-primary" id="submitbtn">PLACE ORDER</button></td>
                                 </tr>
                             </table>
                         </div>
@@ -257,10 +261,40 @@
         </form>
     </div>
 </div>
+  <!-- <script>
+    function initPayPalButton() {
+      paypal.Buttons({
+        style: {
+          shape: 'rect',
+          color: 'gold',
+          layout: 'horizontal',
+          label: 'paypal',
+          
+        },
+
+        createOrder: function(data, actions) {
+          return actions.order.create({
+            purchase_units: [{"amount":{"currency_code":"USD","value":1}}]
+          });
+        },
+
+        onApprove: function(data, actions) {
+          return actions.order.capture().then(function(details) {
+            alert('Transaction completed by ' + details.payer.name.given_name + '!');
+          });
+        },
+
+        onError: function(err) {
+          console.log(err);
+        }
+      }).render('#paypal-button-container');
+    }
+    initPayPalButton();
+  </script> -->
 @include('components.footer')
 @endsection
 @section('script')
-<script src="https://www.paypal.com/sdk/js?client-id=AS4RC9ACUJEUfAZHnPyiq4chJcOGzclOslQX9SBaFeHi9stA5zBOnshRWiJiZHPt3VvZ8T9Q7SNWLBjg" data-sdk-integration-source="button-factory"></script>
+<script src="https://www.paypal.com/sdk/js?client-id=Adu_9Ur3vmKuniHRuhEHL2cqkBasc4hFA4Ubw0RQ_1x3Izzj9FmjjmhC9r0ueBcW8tJOrwD4mUvfgY6j" data-sdk-integration-source="button-factory"></script>
 <script>
     // var req = unirest("GET", "https://www.universal-tutorial.com/api/countries/");
     // req.headers({
@@ -271,12 +305,13 @@
     var provinsis = [];
     var kabupatens = [];
     var kecamatans = [];
+    
     function initPayPalButton() {
         paypal.Buttons({
             style: {
                 shape: 'rect',
                 color: 'gold',
-                layout: 'vertical',
+                layout: 'horizontal',
                 label: 'paypal',
             },
             createOrder: function(data, actions) {
@@ -287,6 +322,7 @@
             },
             onApprove: function(data, actions) {
                 return actions.order.capture().then(function(details) {
+                    $('#main-checkout-form').submit();
                     alert('Transaction completed by ' + details.payer.name.given_name + '!');
                 });
             },
@@ -368,12 +404,13 @@
         // });
         $('#selectCountry').select2();
         $('#selectState').select2();
-        $('#selectCity').select2();
-        
         $('#selectCountry').change(function() {
             if($(this).val() == 'Indonesia') {
+                $('#inputCityText').css('display', 'none');
+                $('#inputCitySelect').css('display', 'block');
                 $('#inputKec').css('display', 'block');
                 $('#inputKel').css('display', 'block');
+                $('#selectCity').select2();
                 $('#selectKec').select2();
                 $('#selectKel').select2();
                 $('#selectState').empty().append('<option value="" selected="selected" disabled></option>');
@@ -385,6 +422,8 @@
                 });
             }
             else {
+                $('#inputCityText').css('display', 'block');
+                $('#inputCitySelect').css('display', 'none');
                 $('#inputKec').css('display', 'none');
                 $('#inputKel').css('display', 'none');
                 $('#selectState').empty().append('<option value="" selected="selected" disabled></option>');
@@ -423,26 +462,26 @@
                     });
                 });
             }
-            else {
-                $('#selectCity').empty().append('<option value="" selected="selected" disabled></option>');
-                var state = $(this).select2('data')[0].id;
-                $.ajax({
-                    url: "https://www.universal-tutorial.com/api/cities/"+state,
-                    type: "GET",
-                    dataType: 'json',
-                    headers: {
-                        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJtNDVhZGl3aW5hdGFAZ21haWwuY29tIiwiYXBpX3Rva2VuIjoiYnJvb1dwSlhjd0NWTWRfVmNFbXdmLTlWN1Bpd1NKeG9fTTgxcHBtVllnRlBja0JpSmozeEdSekE0YklJRHhsUXVoSSJ9LCJleHAiOjE2MTA1MzI0NzR9.59H6kPOvP_DUA-eKl9gNnBpLPjn-k4cdA_Ma0CF1bPg",
-                        "Accept": "application/json"
-                    },
-                    contentType: 'application/json; charset=utf-8',
-                    success: function(result) { 
-                        result.forEach(city => {
-                            $('#selectCity').append('<option value="'+city.city_name+'">'+city.city_name+'</option>');
-                        });
-                    },
-                    error: function (error) {   console.log(error); }
-                });
-            }
+            // else {
+            //     $('#selectCity').empty().append('<option value="" selected="selected" disabled></option>');
+            //     var state = $(this).select2('data')[0].id;
+            //     $.ajax({
+            //         url: "https://www.universal-tutorial.com/api/cities/"+state,
+            //         type: "GET",
+            //         dataType: 'json',
+            //         headers: {
+            //             "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJtNDVhZGl3aW5hdGFAZ21haWwuY29tIiwiYXBpX3Rva2VuIjoiYnJvb1dwSlhjd0NWTWRfVmNFbXdmLTlWN1Bpd1NKeG9fTTgxcHBtVllnRlBja0JpSmozeEdSekE0YklJRHhsUXVoSSJ9LCJleHAiOjE2MTA1MzI0NzR9.59H6kPOvP_DUA-eKl9gNnBpLPjn-k4cdA_Ma0CF1bPg",
+            //             "Accept": "application/json"
+            //         },
+            //         contentType: 'application/json; charset=utf-8',
+            //         success: function(result) { 
+            //             result.forEach(city => {
+            //                 $('#selectCity').append('<option value="'+city.city_name+'">'+city.city_name+'</option>');
+            //             });
+            //         },
+            //         error: function (error) {   console.log(error); }
+            //     });
+            // }
         });
         $('#selectCity').change(function() {
             if($('#selectCountry').val() == 'Indonesia') {
@@ -480,10 +519,12 @@
         $('#radPayPal').change(function() {
             $('#radTrfBank').removeAttr("checked");
             $('#smart-button-container').css('display', 'block');
+            $('#submitbtn').css('display', 'none');
         });
         $('#radTrfBank').change(function() {
             $('#radPayPal').removeAttr("checked");
             $('#smart-button-container').css('display', 'none');
+            $('#submitbtn').css('display', 'block');
         });
         $('#showlogin').click(function() {
             $('#login').css('display', 'block');
@@ -547,11 +588,6 @@
                     $('#grandtotal-val').html(prefix + ' {!! $grandtotal !!}');
                     $('#h-grandtotal').val({!! $grandtotal !!});
                 });
-            }
-        });
-        $('#radPayPal').change(function() {
-            if(this.checked) {
-                $('#smart-button-container').css('display', 'block');
             }
         });
     });

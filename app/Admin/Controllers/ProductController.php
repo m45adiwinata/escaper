@@ -37,6 +37,8 @@ class ProductController extends AdminController
         $grid->column('image', __('Image'))->carousel($width=300, $height = 200);
         $grid->column('name', __('Name'));
         $grid->column('desc', __('Desc'));
+        $grid->column('discount', __('Discount'));
+        $grid->column('discounttype', __('Discount Type'));
 
         return $grid;
     }
@@ -56,6 +58,8 @@ class ProductController extends AdminController
         $show->avatar()->image('image', __('Image'));
         $show->field('name', __('Name'));
         $show->field('desc', __('Desc'));
+        $show->field('discount', __('Discount'));
+        $show->field('discounttype', __('Discount Type'));
         $show->field('created_at', __('Created at'));
         $show->field('updated_at', __('Updated at'));
 
@@ -88,6 +92,12 @@ class ProductController extends AdminController
         $form->multipleImage('image', 'Image')->move('images/products/'.$id)->removable();
         $form->text('name', __('Name'));
         $form->textarea('desc', __('Desc'));
+        $form->number('discount', 'Discount');
+        $states = [
+            'on'  => ['value' => 1, 'text' => 'Regular', 'color' => 'success'],
+            'off' => ['value' => 0, 'text' => 'Percentage', 'color' => 'info'],
+        ];
+        $form->switch('discounttype', 'Discount Type')->states($states);
         $form->hasMany('availability', function (Form\NestedForm $form) {
             $form->select('size_init')->options(ProductSize::get()->pluck('name', 'initial'));
             $form->currency('IDR', 'IDR')->symbol('Rp');

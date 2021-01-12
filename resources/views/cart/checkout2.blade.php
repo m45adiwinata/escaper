@@ -239,7 +239,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><button type="submit" class="btn btn-primary">PLACE ORDER</button></td>
+                                    <td><button type="submit" class="btn btn-primary" id="submitbtn">PLACE ORDER</button></td>
                                 </tr>
                             </table>
                         </div>
@@ -406,10 +406,12 @@
         $('#radPayPal').change(function() {
             $('#radTrfBank').removeAttr("checked");
             $('#smart-button-container').css('display', 'block');
+            $('#submitbtn').css('display', 'none');
         });
         $('#radTrfBank').change(function() {
             $('#radPayPal').removeAttr("checked");
             $('#smart-button-container').css('display', 'none');
+            $('#submitbtn').css('display', 'block');
         });
         $('#showlogin').click(function() {
             $('#login').css('display', 'block');
@@ -473,11 +475,6 @@
                     $('#grandtotal-val').html(prefix + ' {!! $grandtotal !!}');
                     $('#h-grandtotal').val({!! $grandtotal !!});
                 });
-            }
-        });
-        $('#radPayPal').change(function() {
-            if(this.checked) {
-                $('#smart-button-container').css('display', 'block');
             }
         });
     });
