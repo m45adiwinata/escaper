@@ -100,8 +100,8 @@
                             <label for="selectCity"><b>City *</b></label>
                             <select class="form-control" id="selectCity" name="city"><option value="" selected="selected" disabled></option></select>
                         </div>
-                        <div class="form-group">
-                            <label for="selectKec" style="display:none;"><b>Kecamatan *</b></label>
+                        <div class="form-group" style="display:none;">
+                            <label for="selectKec"><b>Kecamatan *</b></label>
                             <select class="form-control" id="selectKec" name="kec"><option value="" selected="selected" disabled></option></select>
                         </div>
                         <div class="form-group" style="display:none;">
@@ -349,7 +349,7 @@
             type: "GET",
             dataType: 'json',
             headers: {
-                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJtNDVhZGl3aW5hdGFAZ21haWwuY29tIiwiYXBpX3Rva2VuIjoiYnJvb1dwSlhjd0NWTWRfVmNFbXdmLTlWN1Bpd1NKeG9fTTgxcHBtVllnRlBja0JpSmozeEdSekE0YklJRHhsUXVoSSJ9LCJleHAiOjE2MDk5NDQ5ODJ9.dsxGrsd27mWKGuqjlFSUADfojRcJQeygm-fQzZDkH0Y",
+                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJtNDVhZGl3aW5hdGFAZ21haWwuY29tIiwiYXBpX3Rva2VuIjoiYnJvb1dwSlhjd0NWTWRfVmNFbXdmLTlWN1Bpd1NKeG9fTTgxcHBtVllnRlBja0JpSmozeEdSekE0YklJRHhsUXVoSSJ9LCJleHAiOjE2MTA1MzI0NzR9.59H6kPOvP_DUA-eKl9gNnBpLPjn-k4cdA_Ma0CF1bPg",
                 "Accept": "application/json"
             },
             contentType: 'application/json; charset=utf-8',
@@ -390,7 +390,7 @@
                     type: "GET",
                     dataType: 'json',
                     headers: {
-                        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJtNDVhZGl3aW5hdGFAZ21haWwuY29tIiwiYXBpX3Rva2VuIjoiYnJvb1dwSlhjd0NWTWRfVmNFbXdmLTlWN1Bpd1NKeG9fTTgxcHBtVllnRlBja0JpSmozeEdSekE0YklJRHhsUXVoSSJ9LCJleHAiOjE2MDk5NDQ5ODJ9.dsxGrsd27mWKGuqjlFSUADfojRcJQeygm-fQzZDkH0Y",
+                        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJtNDVhZGl3aW5hdGFAZ21haWwuY29tIiwiYXBpX3Rva2VuIjoiYnJvb1dwSlhjd0NWTWRfVmNFbXdmLTlWN1Bpd1NKeG9fTTgxcHBtVllnRlBja0JpSmozeEdSekE0YklJRHhsUXVoSSJ9LCJleHAiOjE2MTA1MzI0NzR9.59H6kPOvP_DUA-eKl9gNnBpLPjn-k4cdA_Ma0CF1bPg",
                         "Accept": "application/json"
                     },
                     contentType: 'application/json; charset=utf-8',
@@ -427,7 +427,7 @@
                     type: "GET",
                     dataType: 'json',
                     headers: {
-                        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJtNDVhZGl3aW5hdGFAZ21haWwuY29tIiwiYXBpX3Rva2VuIjoiYnJvb1dwSlhjd0NWTWRfVmNFbXdmLTlWN1Bpd1NKeG9fTTgxcHBtVllnRlBja0JpSmozeEdSekE0YklJRHhsUXVoSSJ9LCJleHAiOjE2MDk5NDQ5ODJ9.dsxGrsd27mWKGuqjlFSUADfojRcJQeygm-fQzZDkH0Y",
+                        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJtNDVhZGl3aW5hdGFAZ21haWwuY29tIiwiYXBpX3Rva2VuIjoiYnJvb1dwSlhjd0NWTWRfVmNFbXdmLTlWN1Bpd1NKeG9fTTgxcHBtVllnRlBja0JpSmozeEdSekE0YklJRHhsUXVoSSJ9LCJleHAiOjE2MTA1MzI0NzR9.59H6kPOvP_DUA-eKl9gNnBpLPjn-k4cdA_Ma0CF1bPg",
                         "Accept": "application/json"
                     },
                     contentType: 'application/json; charset=utf-8',
