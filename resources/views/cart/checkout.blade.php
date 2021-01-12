@@ -369,19 +369,19 @@
         $('#selectCountry').select2();
         $('#selectState').select2();
         $('#selectCity').select2();
-        $('#selectKec').select2();
-        $('#selectKel').select2();
+        
         $('#selectCountry').change(function() {
             if($(this).val() == 'Indonesia') {
                 $('#inputKec').css('display', 'block');
                 $('#inputKel').css('display', 'block');
+                $('#selectKec').select2();
+                $('#selectKel').select2();
                 $('#selectState').empty().append('<option value="" selected="selected" disabled></option>');
                 $.get("https://dev.farizdotid.com/api/daerahindonesia/provinsi", function(data) {
                     provinsis = data.provinsi;
                     data.provinsi.forEach(d => {
                         $('#selectState').append('<option value="'+d.nama+'">'+d.nama+'</option>');
                     });
-                    console.log("hello");
                 });
             }
             else {
@@ -467,7 +467,7 @@
                 var idkec = -1;
                 kecamatans.forEach(k => {
                     if(k.nama == $('#selectKec').val()) {
-                        idkec = p.id;
+                        idkec = k.id;
                     }
                 });
                 $.get("https://dev.farizdotid.com/api/daerahindonesia/kelurahan?id_kecamatan=" + idkec, function(data) {
