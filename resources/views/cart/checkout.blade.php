@@ -100,11 +100,11 @@
                             <label for="selectCity"><b>City *</b></label>
                             <select class="form-control" id="selectCity" name="city"><option value="" selected="selected" disabled></option></select>
                         </div>
-                        <div class="form-group" style="display:none;">
+                        <div class="form-group" style="display:none;" id="inputKec">
                             <label for="selectKec"><b>Kecamatan *</b></label>
                             <select class="form-control" id="selectKec" name="kec"><option value="" selected="selected" disabled></option></select>
                         </div>
-                        <div class="form-group" style="display:none;">
+                        <div class="form-group" style="display:none;" id="inputKel">
                             <label for="selectKel"><b>Kelurahan *</b></label>
                             <select class="form-control" id="selectKel" name="kel"><option value="" selected="selected" disabled></option></select>
                         </div>
@@ -474,12 +474,12 @@
             }
         });
         if($('#selectCountry').val() == 'Indonesia') {
-            $('#selectKec').css('display', 'block');
-            $('#selectKel').css('display', 'block');
+            $('#inputKec').css('display', 'block');
+            $('#inputKel').css('display', 'block');
         }
         else {
-            $('#selectKec').css('display', 'none');
-            $('#selectKel').css('display', 'none');
+            $('#inputKec').css('display', 'none');
+            $('#inputKel').css('display', 'none');
         }
 
         $('#radPayPal').change(function() {
