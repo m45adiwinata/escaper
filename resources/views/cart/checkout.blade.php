@@ -453,7 +453,7 @@
                         idkab = k.id;
                     }
                 });
-                $.get("http://dev.farizdotid.com/api/daerahindonesia/kecamatan?id_kota=" + idkab, function(data) {
+                $.get("https://dev.farizdotid.com/api/daerahindonesia/kecamatan?id_kota=" + idkab, function(data) {
                     kecamatans = data.kecamatan;
                     data.kecamatan.forEach(k => {
                         $('#selectKec').append('<option value="'+k.nama+'">'+k.nama+'</option>');
