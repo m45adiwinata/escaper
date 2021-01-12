@@ -446,7 +446,7 @@
                 var idkab = -1;
                 kabupatens.forEach(k => {
                     if(k.nama == $('#selectCity').val()) {
-                        idkab = p.id;
+                        idkab = k.id;
                     }
                 });
                 $.get("http://dev.farizdotid.com/api/daerahindonesia/kecamatan?id_kota=" + idkab, function(data) {
