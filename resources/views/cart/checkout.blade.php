@@ -373,6 +373,8 @@
         $('#selectKel').select2();
         $('#selectCountry').change(function() {
             if($(this).val() == 'Indonesia') {
+                $('#inputKec').css('display', 'block');
+                $('#inputKel').css('display', 'block');
                 $('#selectState').empty().append('<option value="" selected="selected" disabled></option>');
                 $.get("https://dev.farizdotid.com/api/daerahindonesia/provinsi", function(data) {
                     provinsis = data.provinsi;
@@ -383,6 +385,8 @@
                 });
             }
             else {
+                $('#inputKec').css('display', 'none');
+                $('#inputKel').css('display', 'none');
                 $('#selectState').empty().append('<option value="" selected="selected" disabled></option>');
                 var country = $(this).select2('data')[0].id;
                 $.ajax({
@@ -473,15 +477,6 @@
                 });
             }
         });
-        if($('#selectCountry').val() == 'Indonesia') {
-            $('#inputKec').css('display', 'block');
-            $('#inputKel').css('display', 'block');
-        }
-        else {
-            $('#inputKec').css('display', 'none');
-            $('#inputKel').css('display', 'none');
-        }
-
         $('#radPayPal').change(function() {
             $('#radTrfBank').removeAttr("checked");
             $('#smart-button-container').css('display', 'block');
