@@ -93,12 +93,20 @@
                             <select class="form-control" id="selectCountry" name="country"><option value="" selected="selected" disabled></option></select>
                         </div>
                         <div class="form-group">
-                            <label for="selectCountry"><b>State/Province *</b></label>
+                            <label for="selectState"><b>State/Province *</b></label>
                             <select class="form-control" id="selectState" name="state"><option value="" selected="selected" disabled></option></select>
                         </div>
                         <div class="form-group">
-                            <label for="selectCountry"><b>City *</b></label>
+                            <label for="selectCity"><b>City *</b></label>
                             <select class="form-control" id="selectCity" name="city"><option value="" selected="selected" disabled></option></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="selectKec" style="display:none;"><b>Kecamatan *</b></label>
+                            <select class="form-control" id="selectKec" name="kec"><option value="" selected="selected" disabled></option></select>
+                        </div>
+                        <div class="form-group" style="display:none;">
+                            <label for="selectKel"><b>Kelurahan *</b></label>
+                            <select class="form-control" id="selectKel" name="kel"><option value="" selected="selected" disabled></option></select>
                         </div>
                         <div class="form-group">
                             <label for="inputAddress"><b>Address *</b></label>
@@ -261,6 +269,8 @@
     //     "user-email": "m45adiwinata@gmail.com"
     // });
     var provinsis = [];
+    var kabupatens = [];
+    var kecamatans = [];
     function initPayPalButton() {
         paypal.Buttons({
             style: {
@@ -359,6 +369,8 @@
         $('#selectCountry').select2();
         $('#selectState').select2();
         $('#selectCity').select2();
+        $('#selectKec').select2();
+        $('#selectKel').select2();
         $('#selectCountry').change(function() {
             if($(this).val() == 'Indonesia') {
                 $('#selectState').empty().append('<option value="" selected="selected" disabled></option>');
@@ -401,6 +413,7 @@
                     }
                 });
                 $.get("https://dev.farizdotid.com/api/daerahindonesia/kota?id_provinsi=" + idprovinsi, function(data) {
+                    kabupatens = data.kota_kabupaten;
                     data.kota_kabupaten.forEach(k => {
                         $('#selectCity').append('<option value="'+k.nama+'">'+k.nama+'</option>');
                     });
@@ -427,6 +440,48 @@
                 });
             }
         });
+        $('#selectCity').change(function() {
+            if($('#selectCountry').val() == 'Indonesia') {
+                $('#selectKec').empty().append('<option value="" selected="selected" disabled></option>');
+                var idkab = -1;
+                kabupatens.forEach(k => {
+                    if(k.nama == $('#selectCity').val()) {
+                        idkab = p.id;
+                    }
+                });
+                $.get("http://dev.farizdotid.com/api/daerahindonesia/kecamatan?id_kota=" + idkab, function(data) {
+                    kecamatans = data.kecamatan;
+                    data.kecamatan.forEach(k => {
+                        $('#selectKec').append('<option value="'+k.nama+'">'+k.nama+'</option>');
+                    });
+                });
+            }
+        });
+        $('#selectKec').change(function() {
+            if($('#selectCountry').val() == 'Indonesia') {
+                $('#selectKel').empty().append('<option value="" selected="selected" disabled></option>');
+                var idkec = -1;
+                kecamatans.forEach(k => {
+                    if(k.nama == $('#selectKec').val()) {
+                        idkec = p.id;
+                    }
+                });
+                $.get("https://dev.farizdotid.com/api/daerahindonesia/kelurahan?id_kecamatan=" + idkec, function(data) {
+                    data.kelurahan.forEach(k => {
+                        $('#selectKel').append('<option value="'+k.nama+'">'+k.nama+'</option>');
+                    });
+                });
+            }
+        });
+        if($('#selectCountry').val() == 'Indonesia') {
+            $('#selectKec').css('display', 'block');
+            $('#selectKel').css('display', 'block');
+        }
+        else {
+            $('#selectKec').css('display', 'none');
+            $('#selectKel').css('display', 'none');
+        }
+
         $('#radPayPal').change(function() {
             $('#radTrfBank').removeAttr("checked");
             $('#smart-button-container').css('display', 'block');

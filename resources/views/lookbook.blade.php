@@ -1,9 +1,9 @@
-@extends('layouts.main')
+@extends('layouts.phone')
 @section('title')
  | Lookbook
 @endsection
 @section('content')
-@include('components.header2')
+@include('components.headerphone2')
 <div class="lookbook">
 <div class="swiper-container">
     <div class="swiper-wrapper">
