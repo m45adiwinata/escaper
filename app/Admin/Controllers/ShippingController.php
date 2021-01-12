@@ -61,7 +61,7 @@ class ShippingController extends AdminController
     {
         $form = new Form(new Shipping());
 
-        $form->textarea('text', __('Text'));
+        $form->ckeditor('text', __('Text'));
 
         return $form;
     }
