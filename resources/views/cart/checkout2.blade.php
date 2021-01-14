@@ -16,34 +16,7 @@
             </tr>
         </table>
         <div>
-            Returning customer? <a href="#" class="showlogin hitam-ke-orange" id="showlogin">Click here to login</a>
-            <div id="login" style="display:none;">
-                If you have shopped with us before, please enter your detail below. If you are a new customer, please proceed to the Billing section.
-                <form action="/cart/checkout/login" method="POST">
-                    @csrf
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="username"><b>Username or email *</b></label>
-                            <input type="email" class="form-control" name="username" id="username" placeholder="" autocomplete="off">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="password"><b>Password *</b></label>
-                            <input type="password" class="form-control" name="password" id="password" placeholder="" autocomplete="off">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="checkRemember" name="checkRemember">
-                            <label class="form-check-label" for="checkRemember">
-                                <b>Remember me</b>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <button class="btn">LOGIN</button>
-                    </div>
-                </form>
-            </div>
+            Welcome back {{$user->first_name}}!
         </div>
         <br>
         <div>
@@ -69,7 +42,7 @@
         <div class="row">
             <div class="col-sm-12"><h4>BILLING & SHIPPING</h4></div>
         </div>
-        <form action="/cart/place-order" method="POST">
+        <form action="/cart/place-order" method="POST" id="main-checkout-form">
             @csrf
             <div class="container">
                 <div class="row">
@@ -96,10 +69,41 @@
                             <label for="selectCountry"><b>State/Province *</b></label>
                             <select class="form-control" id="selectState" name="state"><option value="" selected="selected" disabled></option></select>
                         </div>
-                        <div class="form-group">
-                            <label for="selectCountry"><b>City *</b></label>
+                        @if($user->country == 'Indonesia')
+                        <div class="form-group" id="inputCitySelect">
+                            <label for="selectCity"><b>City *</b></label>
                             <select class="form-control" id="selectCity" name="city"><option value="" selected="selected" disabled></option></select>
                         </div>
+                        <div class="form-group" style="display:none;" id="inputCityText">
+                            <label for="inputCity"><b>City *</b></label>
+                            <input type="text" class="form-control" name="citytext" id="inputCity" placeholder="">
+                        </div>
+                        <div class="form-group" id="inputKec">
+                            <label for="selectKec"><b>Kecamatan *</b></label>
+                            <select class="form-control" id="selectKec" name="kec"><option value="" selected="selected" disabled></option></select>
+                        </div>
+                        <div class="form-group" id="inputKel">
+                            <label for="selectKel"><b>Kelurahan *</b></label>
+                            <select class="form-control" id="selectKel" name="kel"><option value="" selected="selected" disabled></option></select>
+                        </div>
+                        @else
+                        <div class="form-group" style="display:none;" id="inputCitySelect">
+                            <label for="selectCity"><b>City *</b></label>
+                            <select class="form-control" id="selectCity" name="city"><option value="" selected="selected" disabled></option></select>
+                        </div>
+                        <div class="form-group" id="inputCityText">
+                            <label for="inputCity"><b>City *</b></label>
+                            <input type="text" class="form-control" name="citytext" id="inputCity" placeholder="">
+                        </div>
+                        <div class="form-group" style="display:none;" id="inputKec">
+                            <label for="selectKec"><b>Kecamatan *</b></label>
+                            <select class="form-control" id="selectKec" name="kecamatan"><option value="" selected="selected" disabled></option></select>
+                        </div>
+                        <div class="form-group" style="display:none;" id="inputKel">
+                            <label for="selectKel"><b>Kelurahan *</b></label>
+                            <select class="form-control" id="selectKel" name="kelurahan"><option value="" selected="selected" disabled></option></select>
+                        </div>
+                        @endif
                         <div class="form-group">
                             <label for="inputAddress"><b>Address *</b></label>
                             <input type="text" class="form-control" id="inputAddress" placeholder="" name="address" value="{{$user->address}}">
@@ -123,7 +127,7 @@
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="createAcc" id="checkCreateAcc" name="checkCreateAcc">
+                            <input class="form-check-input" type="checkbox" value="createAcc" id="checkCreateAcc" name="checkCreateAcc" checked>
                                 <label class="form-check-label" for="checkCreateAcc">
                                 Create an account?
                             </label>
@@ -252,21 +256,18 @@
 @include('components.footer')
 @endsection
 @section('script')
-<script src="https://www.paypal.com/sdk/js?client-id=AS4RC9ACUJEUfAZHnPyiq4chJcOGzclOslQX9SBaFeHi9stA5zBOnshRWiJiZHPt3VvZ8T9Q7SNWLBjg" data-sdk-integration-source="button-factory"></script>
+<script src="https://www.paypal.com/sdk/js?client-id=Adu_9Ur3vmKuniHRuhEHL2cqkBasc4hFA4Ubw0RQ_1x3Izzj9FmjjmhC9r0ueBcW8tJOrwD4mUvfgY6j" data-sdk-integration-source="button-factory"></script>
 <script>
     var user = {!! $user !!};
-    // var req = unirest("GET", "https://www.universal-tutorial.com/api/countries/");
-    // req.headers({
-    //     "Accept": "application/json",
-    //     "api-token": "brooWpJXcwCVMd_VcEmwf-9V7PiwSJxo_M81ppmVYgFPckBiJj3xGRzA4bIIDxlQuhI",
-    //     "user-email": "m45adiwinata@gmail.com"
-    // });
+    var provinsis = [];
+    var kabupatens = [];
+    var kecamatans = [];
     function initPayPalButton() {
         paypal.Buttons({
             style: {
                 shape: 'rect',
                 color: 'gold',
-                layout: 'vertical',
+                layout: 'horizontal',
                 label: 'paypal',
             },
             createOrder: function(data, actions) {
@@ -277,6 +278,7 @@
             },
             onApprove: function(data, actions) {
                 return actions.order.capture().then(function(details) {
+                    $('#main-checkout-form').submit();
                     alert('Transaction completed by ' + details.payer.name.given_name + '!');
                 });
             },
@@ -339,7 +341,7 @@
             type: "GET",
             dataType: 'json',
             headers: {
-                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJtNDVhZGl3aW5hdGFAZ21haWwuY29tIiwiYXBpX3Rva2VuIjoiYnJvb1dwSlhjd0NWTWRfVmNFbXdmLTlWN1Bpd1NKeG9fTTgxcHBtVllnRlBja0JpSmozeEdSekE0YklJRHhsUXVoSSJ9LCJleHAiOjE2MDk1OTQ5MjN9.bdeomNMmojKfJzMFAzdr6Q9KEZrT4l7kHpPt_sJsYXY",
+                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJtNDVhZGl3aW5hdGFAZ21haWwuY29tIiwiYXBpX3Rva2VuIjoiYnJvb1dwSlhjd0NWTWRfVmNFbXdmLTlWN1Bpd1NKeG9fTTgxcHBtVllnRlBja0JpSmozeEdSekE0YklJRHhsUXVoSSJ9LCJleHAiOjE2MTA3MDY0OTZ9.1GZZUtzXHfPhYzQO03bg-AApINOqXQHD3pKPvTEP1Ic",
                 "Accept": "application/json"
             },
             contentType: 'application/json; charset=utf-8',
@@ -347,7 +349,8 @@
                 result.forEach(country => {
                     $('#selectCountry').append('<option value="'+country.country_name+'">'+country.country_name+'</option>');
                 });
-                $('#selectCountry').val(user.country).trigger('change');
+                $('#selectCountry').val('{!! $user->country !!}');
+                $('#selectCountry').trigger('change');
             },
             error: function (error) {   console.log(error); }
         });
@@ -359,48 +362,107 @@
         // });
         $('#selectCountry').select2();
         $('#selectState').select2();
-        $('#selectCity').select2();
         $('#selectCountry').change(function() {
-            $('#selectState').empty().append('<option value="" selected="selected" disabled></option>');
-            var country = $(this).select2('data')[0].id;
-            $.ajax({
-                url: "https://www.universal-tutorial.com/api/states/"+country,
-                type: "GET",
-                dataType: 'json',
-                headers: {
-                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJtNDVhZGl3aW5hdGFAZ21haWwuY29tIiwiYXBpX3Rva2VuIjoiYnJvb1dwSlhjd0NWTWRfVmNFbXdmLTlWN1Bpd1NKeG9fTTgxcHBtVllnRlBja0JpSmozeEdSekE0YklJRHhsUXVoSSJ9LCJleHAiOjE2MDk1OTQ5MjN9.bdeomNMmojKfJzMFAzdr6Q9KEZrT4l7kHpPt_sJsYXY",
-                    "Accept": "application/json"
-                },
-                contentType: 'application/json; charset=utf-8',
-                success: function(result) { 
-                    result.forEach(state => {
-                        $('#selectState').append('<option value="'+state.state_name+'">'+state.state_name+'</option>');
+            if($(this).val() == 'Indonesia') {
+                $('#inputCityText').css('display', 'none');
+                $('#inputCitySelect').css('display', 'block');
+                $('#inputKec').css('display', 'block');
+                $('#inputKel').css('display', 'block');
+                $('#selectCity').select2();
+                $('#selectKec').select2();
+                $('#selectKel').select2();
+                $('#selectState').empty().append('<option value="" selected="selected" disabled></option>');
+                $.get("https://dev.farizdotid.com/api/daerahindonesia/provinsi", function(data) {
+                    provinsis = data.provinsi;
+                    data.provinsi.forEach(d => {
+                        $('#selectState').append('<option value="'+d.nama+'">'+d.nama+'</option>');
                     });
-                    $('#selectState').val(user.state).trigger('change');
-                },
-                error: function (error) {   console.log(error); }
-            });
+                    $('#selectState').val(user.state);
+                    $('#selectState').trigger('change');
+                });
+            }
+            else {
+                $('#inputCityText').css('display', 'block');
+                $('#inputCitySelect').css('display', 'none');
+                $('#inputKec').css('display', 'none');
+                $('#inputKel').css('display', 'none');
+                $('#selectState').empty().append('<option value="" selected="selected" disabled></option>');
+                var country = $(this).select2('data')[0].id;
+                $.ajax({
+                    url: "https://www.universal-tutorial.com/api/states/"+country,
+                    type: "GET",
+                    dataType: 'json',
+                    headers: {
+                        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJtNDVhZGl3aW5hdGFAZ21haWwuY29tIiwiYXBpX3Rva2VuIjoiYnJvb1dwSlhjd0NWTWRfVmNFbXdmLTlWN1Bpd1NKeG9fTTgxcHBtVllnRlBja0JpSmozeEdSekE0YklJRHhsUXVoSSJ9LCJleHAiOjE2MTA3MDY0OTZ9.1GZZUtzXHfPhYzQO03bg-AApINOqXQHD3pKPvTEP1Ic",
+                        "Accept": "application/json"
+                    },
+                    contentType: 'application/json; charset=utf-8',
+                    success: function(result) { 
+                        result.forEach(state => {
+                            $('#selectState').append('<option value="'+state.state_name+'">'+state.state_name+'</option>');
+                        });
+                        $('#selectState').val('{!! $user->state !!}');
+                        $('#selectState').trigger('change');
+                    },
+                    error: function (error) {   console.log(error); }
+                });
+            }
         });
         $('#selectState').change(function() {
-            $('#selectCity').empty().append('<option value="" selected="selected" disabled></option>');
-            var state = $(this).select2('data')[0].id;
-            $.ajax({
-                url: "https://www.universal-tutorial.com/api/cities/"+state,
-                type: "GET",
-                dataType: 'json',
-                headers: {
-                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJtNDVhZGl3aW5hdGFAZ21haWwuY29tIiwiYXBpX3Rva2VuIjoiYnJvb1dwSlhjd0NWTWRfVmNFbXdmLTlWN1Bpd1NKeG9fTTgxcHBtVllnRlBja0JpSmozeEdSekE0YklJRHhsUXVoSSJ9LCJleHAiOjE2MDk1OTQ5MjN9.bdeomNMmojKfJzMFAzdr6Q9KEZrT4l7kHpPt_sJsYXY",
-                    "Accept": "application/json"
-                },
-                contentType: 'application/json; charset=utf-8',
-                success: function(result) { 
-                    result.forEach(city => {
-                        $('#selectCity').append('<option value="'+city.city_name+'">'+city.city_name+'</option>');
+            if($('#selectCountry').val() == 'Indonesia') {
+                $('#selectCity').empty().append('<option value="" selected="selected" disabled></option>');
+                var idprovinsi = -1;
+                provinsis.forEach(p => {
+                    if(p.nama == $('#selectState').val()) {
+                        idprovinsi = p.id;
+                    }
+                });
+                $.get("https://dev.farizdotid.com/api/daerahindonesia/kota?id_provinsi=" + idprovinsi, function(data) {
+                    kabupatens = data.kota_kabupaten;
+                    data.kota_kabupaten.forEach(k => {
+                        $('#selectCity').append('<option value="'+k.nama+'">'+k.nama+'</option>');
                     });
-                    $('#selectCity').val(user.city).trigger('change');
-                },
-                error: function (error) {   console.log(error); }
-            });
+                    $('#selectCity').val(user.city);
+                    $('#selectCity').trigger('change');
+                });
+            }
+        });
+        $('#selectCity').change(function() {
+            if($('#selectCountry').val() == 'Indonesia') {
+                $('#selectKec').empty().append('<option value="" selected="selected" disabled></option>');
+                var idkab = -1;
+                kabupatens.forEach(k => {
+                    if(k.nama == $('#selectCity').val()) {
+                        idkab = k.id;
+                    }
+                });
+                $.get("https://dev.farizdotid.com/api/daerahindonesia/kecamatan?id_kota=" + idkab, function(data) {
+                    kecamatans = data.kecamatan;
+                    data.kecamatan.forEach(k => {
+                        $('#selectKec').append('<option value="'+k.nama+'">'+k.nama+'</option>');
+                    });
+                    $('#selectKec').val(user.kecamatan);
+                    $('#selectKec').trigger('change');
+                });
+            }
+        });
+        $('#selectKec').change(function() {
+            if($('#selectCountry').val() == 'Indonesia') {
+                $('#selectKel').empty().append('<option value="" selected="selected" disabled></option>');
+                var idkec = -1;
+                kecamatans.forEach(k => {
+                    if(k.nama == $('#selectKec').val()) {
+                        idkec = k.id;
+                    }
+                });
+                $.get("https://dev.farizdotid.com/api/daerahindonesia/kelurahan?id_kecamatan=" + idkec, function(data) {
+                    data.kelurahan.forEach(k => {
+                        $('#selectKel').append('<option value="'+k.nama+'">'+k.nama+'</option>');
+                    });
+                    $('#selectKel').val(user.kelurahan);
+                    $('#selectKel').trigger('change');
+                });
+            }
         });
         
         $('#radPayPal').change(function() {

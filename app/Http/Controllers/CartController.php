@@ -102,7 +102,14 @@ class CartController extends Controller
         $data->company = $request->company;
         $data->country = $request->country;
         $data->state = $request->state;
-        $data->city = $request->city;
+        if($request->country == 'Indonesia') {
+            $data->city = $request->city;
+            $data->kecamatan = $request->kecamatan;
+            $data->kelurahan = $request->kelurahan;
+        }
+        else {
+            $data->city = $request->citytext;
+        }
         $data->address = $request->address;
         $data->zipcode = $request->zipcode;
         $data->phone = $request->phone;
@@ -127,6 +134,10 @@ class CartController extends Controller
                 $user->country = $data->country;
                 $user->state = $data->state;
                 $user->city = $data->city;
+                if($request->country == 'Indonesia') {
+                    $data->kecamatan = $data->kecamatan;
+                    $data->kelurahan = $data->kelurahan;
+                }
                 $user->address = $data->address;
                 $user->zipcode = $data->zipcode;
                 $user->phone = $data->phone;
