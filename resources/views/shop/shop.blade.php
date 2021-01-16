@@ -6,7 +6,7 @@
          <div class="shop-wrapper">
             <div class="row">
                 @foreach($products as $product)
-                <div class="col-sm-6 col-md-4">
+                <div class="col-6 col-md-3">
                     <div class="item">
                         <a href="/product?productid={{$product->id}}">
                             <div class="item-img">

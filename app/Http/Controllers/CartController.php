@@ -29,7 +29,8 @@ class CartController extends Controller
             else {
                 $data['textberjalan'] = $textberjalan->text;
             }
-            return view('cart.index', $data);
+            // return view('cart.index', $data);
+            return view('cart.index2', $data);
         }
 
         return redirect('/');
@@ -133,7 +134,7 @@ class CartController extends Controller
                 $user->company = $data->company;
                 $user->country = $data->country;
                 $user->state = $data->state;
-                $user->city = $data->city;
+                $data->city = $data->city;
                 if($request->country == 'Indonesia') {
                     $data->kecamatan = $data->kecamatan;
                     $data->kelurahan = $data->kelurahan;
@@ -419,6 +420,7 @@ class CartController extends Controller
         if (md5($request->password) == $data['user']->password) {
             return view('cart.checkout2', $data);
         }
+        
         return redirect('/cart/checkout');
     }
 }

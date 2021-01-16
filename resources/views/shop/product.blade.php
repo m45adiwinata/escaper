@@ -7,9 +7,9 @@
             <div class="shop-top">
                 <a href="/shop" style="text-decoration:none; color:black;"><p>Shop</p></a>
             </div>
-            <div class="row" style="border:1px solid black; padding:5px; display:none;" id="notification">
-                <div class="col-sm-8 pt-1">&#10003 "{{$product->name}}" has been added to your cart.</div>
-                <div class="col-sm-4 text-right"><a class="btn btn-success text-light" style="background:black; border:1px solid black; border-radius:0px;" href="/cart">VIEW CART</a></div>
+            <div class="product-added" id="notification">
+                <div class="product-added-text">&#10003 "{{$product->name}}" has been added to your cart.</div>
+                <div class="product-added-btn "><a class="btn" href="/cart">View Cart</a></div>
             </div>
             <div class="row">
                 <div class="col-md-6">
@@ -125,7 +125,7 @@
                     if (data.count > 0) {
                         $('#cart').html(data.count);
                         $('#cart-black').html(data.count);
-                        $('#notification').css('display', 'block');
+                        $('#notification').css('display', 'flex');
                     }
                 });
             });
