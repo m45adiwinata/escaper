@@ -184,32 +184,51 @@ class CartController extends Controller
         $data->sub_total = $sub_total;
         $data->grand_total = $grand_total;
         $data->save();
-        // Cart::where('guest_code', $data->guest_code)->update(['checkout' => 1]);
-        // $temp = array(
-        //     'email' => $data->email,
-        //     'first_name' => $data->first_name,
-        //     'last_name' => $data->last_name,
-        //     'address' => $data->address,
-        //     'zipcode' => $data->zipcode,
-        //     'city' => $data->city,
-        //     'state' => $data->state,
-        //     'country' => $data->country,
-        //     'phone' => $data->phone,
-        //     'guest_code' => $data->guest_code,
-        //     'currency' => $data->currency,
-        //     'sub_total' => $sub_total,
-        //     'grand_total' => $grand_total,
-        //     'payment' => $temp_payment,
-        //     'discount' => $data->discount,
-        //     'shipping' => $data->shipping,
-        //     'carts' => $carts,
-        //     'logo' => env('APP_URL').'/images/LOGO-PNG%20BLACKBG.png'
-        // );
-        // Mail::send('emailku', $temp, function($message) use ($temp) {
-        //     $message->to($temp['email']);
-        //     $message->from('info@escaper-store.com');
-        //     $message->subject('Purchase '.$temp['guest_code']);
-        // });
+        Cart::where('guest_code', $data->guest_code)->update(['checkout' => 1]);
+        $temp = array(
+            'email' => $data->email,
+            'first_name' => $data->first_name,
+            'last_name' => $data->last_name,
+            'address' => $data->address,
+            'zipcode' => $data->zipcode,
+            'city' => $data->city,
+            'state' => $data->state,
+            'country' => $data->country,
+            'phone' => $data->phone,
+            'guest_code' => $data->guest_code,
+            'currency' => $data->currency,
+            'sub_total' => $sub_total,
+            'grand_total' => $grand_total,
+            'payment' => $temp_payment,
+            'discount' => $data->discount,
+            'shipping' => $data->shipping,
+            'carts' => $carts,
+            'logo' => env('APP_URL').'/images/LOGO-PNG%20BLACKBG.png'
+        );
+        Mail::send('emailku', $temp, function($message) use ($temp) {
+            $message->to($temp['email']);
+            $message->from('info@escaper-store.com');
+            $message->subject('Purchase '.$temp['guest_code']);
+        });
+        if (!isset($request->radTrfBank)) {
+            $data->buktitrf = '-';
+            $data->save();
+            $temp = array(
+                'email' => $data->email,
+                'first_name' => $data->first_name,
+                'last_name' => $data->last_name,
+                'guest_code' => $data->guest_code,
+                'currency' => $data->currency,
+                'grand_total' => $data->grand_total,
+                'image' => env('APP_URL').'/paypal icon.png',
+                'id' => $request->id
+            );
+            Mail::send('emailtransfer', $temp, function($message) use ($temp) {
+                $message->to('info.escaper@gmail.com');
+                $message->from('info@escaper-store.com');
+                $message->subject('Purchase '.$temp['guest_code']);
+            });
+        }
         $carts = Cart::where('guest_code', $_COOKIE['guest_code'])->where('checkout', 0)->get();
         foreach ($carts as $key => $cart) {
             $cart->checkout = 1;
