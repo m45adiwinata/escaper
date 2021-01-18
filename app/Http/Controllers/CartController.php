@@ -169,6 +169,10 @@ class CartController extends Controller
             $cart = array('name' => $d->product()->first()->name, 'qty' => $d->amount, 'price' => 0, 'subtotal' => 0, 'image' => '');
             $cart['image'] = env('APP_URL').'/'.$d->product()->first()->image[0];
             $avl = ProductAvailability::where('product_id', $d->product_id)->where('size_init', $d->sizeInitial()->first()->initial)->first();
+            if (!isset($request->radTrfBank)) {
+                $avl->stocks -= $d->amount;
+                $avl->save();
+            }
             if ($d->currency == 'IDR') {
                 $total = $avl->IDR * $d->amount;
                 $cart['price'] = $avl->IDR;
@@ -229,11 +233,6 @@ class CartController extends Controller
                 $message->subject('Purchase '.$temp['guest_code']);
             });
         }
-        $carts = Cart::where('guest_code', $_COOKIE['guest_code'])->where('checkout', 0)->get();
-        foreach ($carts as $key => $cart) {
-            $cart->checkout = 1;
-            $cart->save();
-        }
         
         if ($data->pembayaran == 1) {
             return redirect('/cart/upload-payment/'.$data->id);
@@ -286,6 +285,13 @@ class CartController extends Controller
             $message->from('info@escaper-store.com');
             $message->subject('Purchase '.$temp['guest_code']);
         });
+        $carts = Cart::where('guest_code', $data->guest_code)->where('checkout', 1)->get();
+        foreach ($carts as $key => $cart) {
+            $size = ProductSize::find($cart->product_size_id);
+            $avl = ProductAvailability::where('product_id', $cart->product_id)->where('size_init', $size->initial)->first();
+            $avl->stocks -= 1;
+            $avl->save();
+        }
         
         return redirect("/home");
     }
