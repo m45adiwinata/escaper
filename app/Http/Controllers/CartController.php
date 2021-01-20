@@ -231,7 +231,7 @@ class CartController extends Controller
             'guest_code' => $data->guest_code,
             'currency' => $data->currency,
             'grand_total' => $data->grand_total,
-            'image' => env('APP_URL').'/images/paypal icon.png',
+            'image' => env('APP_URL').'/images/paypal%20icon.png',
             'id' => $request->id
         );
         Mail::send('emailtransfer', $temp, function($message) use ($temp) {
