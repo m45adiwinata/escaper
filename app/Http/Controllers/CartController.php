@@ -208,7 +208,7 @@ class CartController extends Controller
             'discount' => $data->discount,
             'shipping' => $data->shipping,
             'carts' => $carts,
-            'logo' => env('APP_URL').'/images/LOGO-PNG%20BLACKBG.png'
+            'logo' => env('APP_URL').'/images/LOGO-PNG.png'
         );
         Mail::send('emailku', $temp, function($message) use ($temp) {
             $message->to($temp['email']);

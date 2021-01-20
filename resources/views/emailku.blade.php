@@ -1,5 +1,5 @@
 <img src="{{$message->embed($logo)}}" alt="ESCAPER'S LOGO" style="width:887px; height:133px; display:block; margin-left:auto; margin-right:auto;">
-<h2 style="text-align:center;">Thannk you {{ $first_name }} {{$last_name}},<br>your order has been received.</h2>
+<h2 style="text-align:center;">Thank you {{ $first_name }} {{$last_name}},<br>your order has been received.</h2>
 <h4 style="text-align:center;">Purchase Code : {{ $guest_code }}</h4>
 <br>
 <h4>Customer Info</h4>
@@ -14,8 +14,8 @@
     <thead>
         <tr>
             <th colspan="2">Product</th>
-            <th>Quantity</th>
-            <th>Price@</th>
+            <th style="padding:10px;">Quantity</th>
+            <th style="padding:10px;">Price</th>
         </tr>
     </thead>
     <tbody>
