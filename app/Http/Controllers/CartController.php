@@ -22,12 +22,17 @@ class CartController extends Controller
                 $data['carts'][$i]->avl = ProductAvailability::where('product_id', $data['carts'][$i]->product_id)
                                             ->where('size_init', $data['carts'][$i]->sizeInitial()->first()->initial)->first();
             }
-            $textberjalan = TextBerjalan::where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'))->orderBy('created_at')->first();
+            $textberjalan = TextBerjalan::where('currency', $_COOKIE['currency'])->where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'))->orderBy('created_at')->get();
             if(!$textberjalan) {
                 $data['textberjalan'] = 'text here';
             }
             else {
-                $data['textberjalan'] = $textberjalan->text;
+                $text = '';
+                foreach ($textberjalan as $key => $tb) {
+                    $text .= $tb->text;
+                    $text .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                }
+                $data['textberjalan'] = $text;
             }
             // return view('cart.index', $data);
             return view('cart.index2', $data);
@@ -86,7 +91,7 @@ class CartController extends Controller
             $tc->grandtotal = $grandtotal;
             $tc->save();
 
-            return view('cart.checkout', $data);
+            return view('cart.checkout3', $data);
         }
 
         return redirect('/');
@@ -169,10 +174,6 @@ class CartController extends Controller
             $cart = array('name' => $d->product()->first()->name, 'qty' => $d->amount, 'price' => 0, 'subtotal' => 0, 'image' => '');
             $cart['image'] = env('APP_URL').'/'.$d->product()->first()->image[0];
             $avl = ProductAvailability::where('product_id', $d->product_id)->where('size_init', $d->sizeInitial()->first()->initial)->first();
-            if (!isset($request->radTrfBank)) {
-                $avl->stocks -= $d->amount;
-                $avl->save();
-            }
             if ($d->currency == 'IDR') {
                 $total = $avl->IDR * $d->amount;
                 $cart['price'] = $avl->IDR;
@@ -188,50 +189,36 @@ class CartController extends Controller
         $data->sub_total = $sub_total;
         $data->grand_total = $grand_total;
         $data->save();
-        Cart::where('guest_code', $data->guest_code)->update(['checkout' => 1]);
-        $temp = array(
-            'email' => $data->email,
-            'first_name' => $data->first_name,
-            'last_name' => $data->last_name,
-            'address' => $data->address,
-            'zipcode' => $data->zipcode,
-            'city' => $data->city,
-            'state' => $data->state,
-            'country' => $data->country,
-            'phone' => $data->phone,
-            'guest_code' => $data->guest_code,
-            'currency' => $data->currency,
-            'sub_total' => $sub_total,
-            'grand_total' => $grand_total,
-            'payment' => $temp_payment,
-            'discount' => $data->discount,
-            'shipping' => $data->shipping,
-            'carts' => $carts,
-            'logo' => env('APP_URL').'/images/LOGO-PNG%20BLACKBG.png'
-        );
-        Mail::send('emailku', $temp, function($message) use ($temp) {
-            $message->to($temp['email']);
-            $message->from('info@escaper-store.com');
-            $message->subject('Purchase '.$temp['guest_code']);
-        });
-        if (!isset($request->radTrfBank)) {
-            $data->buktitrf = '-';
-            $data->save();
-            $temp = array(
-                'email' => $data->email,
-                'first_name' => $data->first_name,
-                'last_name' => $data->last_name,
-                'guest_code' => $data->guest_code,
-                'currency' => $data->currency,
-                'grand_total' => $data->grand_total,
-                'image' => env('APP_URL').'/paypal icon.png',
-                'id' => $request->id
-            );
-            Mail::send('emailtransfer', $temp, function($message) use ($temp) {
-                $message->to('info.escaper@gmail.com');
-                $message->from('info@escaper-store.com');
-                $message->subject('Purchase '.$temp['guest_code']);
-            });
+        // Cart::where('guest_code', $data->guest_code)->update(['checkout' => 1]);
+        // $temp = array(
+        //     'email' => $data->email,
+        //     'first_name' => $data->first_name,
+        //     'last_name' => $data->last_name,
+        //     'address' => $data->address,
+        //     'zipcode' => $data->zipcode,
+        //     'city' => $data->city,
+        //     'state' => $data->state,
+        //     'country' => $data->country,
+        //     'phone' => $data->phone,
+        //     'guest_code' => $data->guest_code,
+        //     'currency' => $data->currency,
+        //     'sub_total' => $sub_total,
+        //     'grand_total' => $grand_total,
+        //     'payment' => $temp_payment,
+        //     'discount' => $data->discount,
+        //     'shipping' => $data->shipping,
+        //     'carts' => $carts,
+        //     'logo' => env('APP_URL').'/images/LOGO-PNG%20BLACKBG.png'
+        // );
+        // Mail::send('emailku', $temp, function($message) use ($temp) {
+        //     $message->to($temp['email']);
+        //     $message->from('info@escaper-store.com');
+        //     $message->subject('Purchase '.$temp['guest_code']);
+        // });
+        $carts = Cart::where('guest_code', $_COOKIE['guest_code'])->where('checkout', 0)->get();
+        foreach ($carts as $key => $cart) {
+            $cart->checkout = 1;
+            $cart->save();
         }
         
         if ($data->pembayaran == 1) {
@@ -285,13 +272,6 @@ class CartController extends Controller
             $message->from('info@escaper-store.com');
             $message->subject('Purchase '.$temp['guest_code']);
         });
-        $carts = Cart::where('guest_code', $data->guest_code)->where('checkout', 1)->get();
-        foreach ($carts as $key => $cart) {
-            $size = ProductSize::find($cart->product_size_id);
-            $avl = ProductAvailability::where('product_id', $cart->product_id)->where('size_init', $size->initial)->first();
-            $avl->stocks -= 1;
-            $avl->save();
-        }
         
         return redirect("/home");
     }

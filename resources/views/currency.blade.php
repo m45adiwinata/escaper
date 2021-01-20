@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
+    <head>     
         <title>ESCAPER&#174; | Select currency</title>
-        <meta charset="utf-8">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
         <!-- <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> -->
         <link href="https://fonts.googleapis.com/css?family=Muli:300,400,700,900" rel="stylesheet">
         <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">
@@ -12,53 +13,105 @@
                 font-family: escaperfont;
                 src: url({{asset('fonts/Hanson-Bold.ttf')}});
             }
-            #header-logo {
+            .currency-wrapper{
+                height:100vh;
+                display:flex;
+                flex-direction:column;
+                align-items:center;
+                justify-content:center;
+            }
+            .header-logo {
                 font-family: escaperfont;
             }
-            .currencyoption {
-                border:none; padding:0px; font-size:80px; font-weight: 800; width:200px; height:200px; background:white;
-                padding-bottom:100px;
+            .header-logo h1{
+                font-size: 100px;
+                color: black;
             }
-            .row-opt {
-                display: -ms-flexbox; /* IE10 */
-                display: flex;
-                -ms-flex-wrap: wrap; /* IE10 */
-                flex-wrap: wrap;
-                padding: 0 4px;
+            .currency-txt{
+                font-size:50px;
+                font-weight:600;
+                color: black;
             }
-            .column {
-                -ms-flex: 50%; /* IE10 */
-                flex: 50%;
-                max-width: 50%;
-                padding: 0 4px;
+            .currencyoption{
+                width:25vw;
+                height:15vw;
+                border:solid black 3px;
+                background:white;
+                font-size:70px;
+                font-weight:900;
+                transition: all .1s ease;
             }
+            .currencyoption:hover{
+                border:none;
+                background:white;
+                font-size:100px;
+                font-weight:900;
+            }
+            @media screen and (max-width: 768px) {
+                .header-logo h1{
+                    font-size: 40px;
+                }
+                .currency-txt{
+                    font-size:20px;
+                }
+                .currency{
+                    display:flex;
+                    justify-content:center;
+                }
+                .currencyoption{
+                    width:30vw;
+                    height:20vw;
+                    margin-bottom:10px;
+                    border:solid black 2px;
+                    font-size:30px;
+                    font-weight:800;
+                }
+                .currencyoption:hover{
+                    border:solid black 2px;
+                    font-size:30px;
+                    font-weight:800;
+                }
+            }
+
             @media screen and (max-width: 500px) {
-                .currencyoption {
-                    font-size:60px;
-                }
-                .choose {
-                    font-size:150%; font-weight: 500;
-                }
-                #header-logo {
-                    font-size:50px;
+                .currencyoption{
+                    width:60vw;
+                    height:35vw;
                 }
             }
-            @media screen and (max-width: 320px) {
-                .currencyoption {
-                    font-size:30px;
-                }
-                .choose {
-                    font-size:100%; font-weight: 500;
-                }
-                #header-logo {
-                    font-size:30px;
-                }
-            }
+            
         </style>
     </head>
     <body>
-        <div>
-            <div class="currency container text-center">
+        <div class="currency-wrapper">
+            <div class="header-logo">
+                <h1>ESCAPER<sup style="font-size:40%; vertical-align:top; top:30px;">&#174;</sup></h1>
+            </div>
+            <div class="currency-txt">
+                <p>CHOOSE YOUR CURRENCY</p>
+            </div>
+            <div class="row">
+                <div class="col-md-6 currency">
+                    <form method="POST" ACTION="/welcome">
+                        @csrf
+                        <input type="hidden" value="IDR" name="currency">
+                        <div class="home-item">
+                            <button type="submit" class="currencyoption">IDR</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-6 currency">
+                    <form method="POST" ACTION="/welcome">
+                        @csrf
+                        <input type="hidden" value="USD" name="currency">
+                        <div class="home-item">
+                            <button type="submit" class="currencyoption">USD</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+            <!--div class="currency container text-center">
                 <div class="row justify-content-center">
                     <div class="col-xl">
                         <h1 class="" id="header-logo" style="font-size:90px;">ESCAPER<sup style="font-size:40%; vertical-align:top; top:7px;">&#174;</sup></h1>
@@ -85,8 +138,7 @@
                         </form>
                     </div>
                 </div>
-            </div>
-        </div>
+            </div-->
         <script src="js/jquery-3.3.1.min.js"></script>
         <script src="js/jquery-migrate-3.0.1.min.js"></script>
         <script src="js/bootstrap.min.js"></script>

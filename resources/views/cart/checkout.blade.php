@@ -106,11 +106,11 @@
                         </div>
                         <div class="form-group" style="display:none;" id="inputKec">
                             <label for="selectKec"><b>Kecamatan *</b></label>
-                            <select class="form-control" id="selectKec" name="kec"><option value="" selected="selected" disabled></option></select>
+                            <select class="form-control" id="selectKec" name="kecamatan"><option value="" selected="selected" disabled></option></select>
                         </div>
                         <div class="form-group" style="display:none;" id="inputKel">
                             <label for="selectKel"><b>Kelurahan *</b></label>
-                            <select class="form-control" id="selectKel" name="kel"><option value="" selected="selected" disabled></option></select>
+                            <select class="form-control" id="selectKel" name="kelurahan"><option value="" selected="selected" disabled></option></select>
                         </div>
                         <div class="form-group">
                             <label for="inputAddress"><b>Address *</b></label>
@@ -275,6 +275,7 @@
     var provinsis = [];
     var kabupatens = [];
     var kecamatans = [];
+    var auth_token;
     
     function initPayPalButton() {
         paypal.Buttons({
@@ -334,34 +335,35 @@
     }
     $(document).ready(function() {
         $('#h-grandtotal').val({!! $grandtotal !!});
-        // $.ajax({
-        //     url:'https://www.universal-tutorial.com/api/getaccesstoken', 
-        //     type: "GET",
-        //     dataType: 'json',
-        //     headers:
-        //     {
-        //         "Accept": "application/json",
-        //         "api-token": "brooWpJXcwCVMd_VcEmwf-9V7PiwSJxo_M81ppmVYgFPckBiJj3xGRzA4bIIDxlQuhI",
-        //         "user-email": "m45adiwinata@gmail.com"
-        //     },
-        //     contentType: 'application/json; charset=utf-8',
-        //     success: function(data) {
-        //     $('#inputCompany').val(data.auth_token);
-        //     },
-        //     error: function (error) {   console.log(error); }
-        // });
         $.ajax({
-            url: "https://www.universal-tutorial.com/api/countries/",
+            url:'https://www.universal-tutorial.com/api/getaccesstoken', 
             type: "GET",
             dataType: 'json',
-            headers: {
-                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJtNDVhZGl3aW5hdGFAZ21haWwuY29tIiwiYXBpX3Rva2VuIjoiYnJvb1dwSlhjd0NWTWRfVmNFbXdmLTlWN1Bpd1NKeG9fTTgxcHBtVllnRlBja0JpSmozeEdSekE0YklJRHhsUXVoSSJ9LCJleHAiOjE2MTEwMjE2MTl9.DbcJeMkD5U9QIdEeVJCNKXjOIS7nJTHeuAG7hoxxj5g",
-                "Accept": "application/json"
+            headers:
+            {
+                "Accept": "application/json",
+                "api-token": "brooWpJXcwCVMd_VcEmwf-9V7PiwSJxo_M81ppmVYgFPckBiJj3xGRzA4bIIDxlQuhI",
+                "user-email": "m45adiwinata@gmail.com"
             },
             contentType: 'application/json; charset=utf-8',
-            success: function(result) { 
-                result.forEach(country => {
-                    $('#selectCountry').append('<option value="'+country.country_name+'">'+country.country_name+'</option>');
+            success: function(data) {
+                // $('#inputCompany').val(data.auth_token);
+                auth_token = data.auth_token;
+                $.ajax({
+                    url: "https://www.universal-tutorial.com/api/countries/",
+                    type: "GET",
+                    dataType: 'json',
+                    headers: {
+                        "Authorization": "Bearer " + auth_token,
+                        "Accept": "application/json"
+                    },
+                    contentType: 'application/json; charset=utf-8',
+                    success: function(result) { 
+                        result.forEach(country => {
+                            $('#selectCountry').append('<option value="'+country.country_name+'">'+country.country_name+'</option>');
+                        });
+                    },
+                    error: function (error) {   console.log(error); }
                 });
             },
             error: function (error) {   console.log(error); }
@@ -403,7 +405,7 @@
                     type: "GET",
                     dataType: 'json',
                     headers: {
-                        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJtNDVhZGl3aW5hdGFAZ21haWwuY29tIiwiYXBpX3Rva2VuIjoiYnJvb1dwSlhjd0NWTWRfVmNFbXdmLTlWN1Bpd1NKeG9fTTgxcHBtVllnRlBja0JpSmozeEdSekE0YklJRHhsUXVoSSJ9LCJleHAiOjE2MTEwMjE2MTl9.DbcJeMkD5U9QIdEeVJCNKXjOIS7nJTHeuAG7hoxxj5g",
+                        "Authorization": "Bearer " + auth_token,
                         "Accept": "application/json"
                     },
                     contentType: 'application/json; charset=utf-8',

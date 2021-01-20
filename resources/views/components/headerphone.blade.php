@@ -1,7 +1,7 @@
 <header>
     <nav class="home-nav" id="navigation">
-        <marquee direction="left">
-            {{$textberjalan}}
+        <marquee direction="left" id="marquee-home">
+            @php echo $textberjalan; @endphp
         </marquee>
         <div class="wrapper container-lg">
             <label for="menu-btn" class="btn menu-btn"><i class="fas fa-bars"></i></label>
