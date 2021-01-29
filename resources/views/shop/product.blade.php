@@ -4,9 +4,6 @@
 <section>
     <div class="container-lg">
         <div class="item-wrapper">
-            <div class="shop-top">
-                <a href="/shop" style="text-decoration:none; color:black;"><p>Shop</p></a>
-            </div>
             <div class="product-added" id="notification">
                 <div class="product-added-text">&#10003 "{{$product->name}}" has been added to your cart.</div>
                 <div class="product-added-btn "><a class="btn" href="/cart">View Cart</a></div>
@@ -62,7 +59,7 @@
                         </div>
                     </div>
                 </div>
-            </div>`
+            </div>
         </div>
     </div>
 </section>

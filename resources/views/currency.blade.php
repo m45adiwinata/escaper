@@ -23,6 +23,11 @@
             .header-logo {
                 font-family: escaperfont;
             }
+            .header-logo sup{
+                font-size:40%; 
+                vertical-align:top; 
+                top:25px;
+            }
             .header-logo h1{
                 font-size: 100px;
                 color: black;
@@ -35,11 +40,15 @@
             .currencyoption{
                 width:25vw;
                 height:15vw;
-                border:solid black 3px;
+                border:none;
+                
                 background:white;
                 font-size:70px;
                 font-weight:900;
                 transition: all .1s ease;
+            }
+            .currencyoption:focus{
+                outline:none;
             }
             .currencyoption:hover{
                 border:none;
@@ -51,6 +60,10 @@
                 .header-logo h1{
                     font-size: 40px;
                 }
+                .header-logo sup{
+                    font-size:35%; 
+                    top:15px;
+                }
                 .currency-txt{
                     font-size:20px;
                 }
@@ -59,10 +72,9 @@
                     justify-content:center;
                 }
                 .currencyoption{
-                    width:30vw;
-                    height:20vw;
+                    width:20vw;
+                    height:10vw;
                     margin-bottom:10px;
-                    border:solid black 2px;
                     font-size:30px;
                     font-weight:800;
                 }
@@ -72,26 +84,19 @@
                     font-weight:800;
                 }
             }
-
-            @media screen and (max-width: 500px) {
-                .currencyoption{
-                    width:60vw;
-                    height:35vw;
-                }
-            }
             
         </style>
     </head>
     <body>
         <div class="currency-wrapper">
             <div class="header-logo">
-                <h1>ESCAPER<sup style="font-size:40%; vertical-align:top; top:30px;">&#174;</sup></h1>
+                <h1>ESCAPER<sup>&#174;</sup></h1>
             </div>
             <div class="currency-txt">
                 <p>CHOOSE YOUR CURRENCY</p>
             </div>
             <div class="row">
-                <div class="col-md-6 currency">
+                <div class="col-6 currency">
                     <form method="POST" ACTION="/welcome">
                         @csrf
                         <input type="hidden" value="IDR" name="currency">
@@ -100,7 +105,7 @@
                         </div>
                     </form>
                 </div>
-                <div class="col-md-6 currency">
+                <div class="col-6 currency">
                     <form method="POST" ACTION="/welcome">
                         @csrf
                         <input type="hidden" value="USD" name="currency">

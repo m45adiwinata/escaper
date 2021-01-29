@@ -11,12 +11,15 @@
             @if(count($carts) > 0)
             <div id="contained">
                 <div class="cart-top">
-                        <a href="">Shopping Carts</a>
-                        <p>></p>
-                        <p>Checkout Detail</p>
-                        <p>></p>
-                        <p>Order Complete</p>
-                    </div>
+                    <a class="shopping-carts" href="">Shopping Carts</a>
+                    <p>></p>
+                    <p class="checkout-detail">Checkout Detail</p>
+                    <p>></p>
+                    <p class="order-complete">Order Complete</p>
+                </div>
+                <div class="cart-removed" id="">
+                    <div><i class="fas fa-check"></i> (nama-product) has been removed from cart. <a href="">Undo ?</a></div>
+                </div>
                 <div class="row">
                     
                     <div class="col-md-8">

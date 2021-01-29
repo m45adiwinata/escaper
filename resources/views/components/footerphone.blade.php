@@ -4,7 +4,7 @@
             <div class="footer-item">
                 <div class="footer-link">
                     <a href="/stockist">Stockist</a>
-                    <a href="/shipping">Shipping</a>
+                    <a href="/shipping">Shipping & Return</a>
                 </div>
                 <form class="newsletter" action="{{route('subscriber.store')}}" method="POST">
                     @csrf

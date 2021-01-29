@@ -7,11 +7,11 @@
 <div class="container-lg">
     <div class="checkout-wrapper">
         <div class="cart-top">
-            <a href="/cart">Shopping Carts</a>
+            <a class="shopping-carts" href="/cart">Shopping Carts</a>
             <p>></p>
-            <a href="/cart/checkout">Checkout Detail</a>
+            <a class="checkout-detail" href="/cart/checkout">Checkout Detail</a>
             <p>></p>
-            <p>Order Complete</p>
+            <p class="order-complete">Order Complete</p>
         </div>
         <div class="checkout-option">
             <p>Returning customer? <a href="#" id="showlogin"> Click here to login</a></p>
@@ -181,7 +181,7 @@
                                             echo('FREE SHIPPING');
                                         }
                                         else if ($_COOKIE['currency'] == 'USD') {
-                                            $shipping = 15;
+                                            $shipping = 10;
                                             echo('$ '.number_format($shipping, 2, ',', '.'));
                                         }
                                         else {
@@ -493,11 +493,16 @@
                     $('#create-password').css('display', 'block');
                     $.get('/cart/check-discount/'+$('#inputEmail').val(), function(count) {
                         if(count == 0) {
+                            // $.ajax({
+                            //     type: "POST",
+                            //     url: '/cart/update-temp-cart',
+                            //     success
+                            // })
                             $.post('/cart/update-temp-cart', {
                                 '_token' : $('meta[name=csrf-token]').attr('content'),
                                 discount: 1
                             })
-                            .success(function() {
+                            .done(function() {
                                 subtotal = {!! $subtotal !!};
                                 grandtotal = {!! $grandtotal !!};
                                 discount = subtotal / 10;
