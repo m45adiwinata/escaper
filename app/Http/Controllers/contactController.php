@@ -9,6 +9,7 @@ use App\ViewContact;
 use App\Checkout;
 use App\TextBerjalan;
 use App\Comment;
+use App\ProductType;
 
 class contactController extends Controller
 {
@@ -27,13 +28,20 @@ class contactController extends Controller
             return redirect('/');
         }
         $data['contact'] = ViewContact::where('status', 1)->orderBy('updated_at')->first();
-        $textberjalan = TextBerjalan::where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'))->orderBy('created_at')->first();
+        $textberjalan = TextBerjalan::where('currency', $_COOKIE['currency'])->where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'))->orderBy('created_at')->get();
         if(!$textberjalan) {
             $data['textberjalan'] = 'text here';
         }
         else {
-            $data['textberjalan'] = $textberjalan->text;
+            $text = '';
+            foreach ($textberjalan as $key => $tb) {
+                $text .= $tb->text;
+                $text .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+            }
+            $data['textberjalan'] = $text;
         }
+        $data['producttypes'] = ProductType::get();
+
         return view('contact', $data);
     }
 

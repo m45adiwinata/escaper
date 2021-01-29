@@ -7,6 +7,7 @@ use App\Cart;
 use App\TextBerjalan;
 use App\Stockist;
 use App\Shipping;
+use App\ProductType;
 use DateTime;
 
 class homeController extends Controller
@@ -48,6 +49,8 @@ class homeController extends Controller
             }
             $data['textberjalan'] = $text;
         }
+        $data['producttypes'] = ProductType::get();
+        
         return view('homepage', $data);
     }
 
@@ -81,27 +84,41 @@ class homeController extends Controller
 
     public function stockist()
     {
-        $textberjalan = TextBerjalan::where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'))->orderBy('created_at')->first();
-        if(!$textberjalan) {
+        $textberjalan = TextBerjalan::where('currency', $_COOKIE['currency'])->where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'))->orderBy('created_at')->get();
+        if(count($textberjalan) == 0) {
             $data['textberjalan'] = 'text here';
         }
         else {
-            $data['textberjalan'] = $textberjalan->text;
+            $text = '';
+            foreach ($textberjalan as $key => $tb) {
+                $text .= $tb->text;
+                $text .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+            }
+            $data['textberjalan'] = $text;
         }
         $data['stockist'] = Stockist::first();
+        $data['producttypes'] = ProductType::get();
+
         return view('stockist', $data);
     }
     
     public function shipping()
     {
-        $textberjalan = TextBerjalan::where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'))->orderBy('created_at')->first();
-        if(!$textberjalan) {
+        $textberjalan = TextBerjalan::where('currency', $_COOKIE['currency'])->where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'))->orderBy('created_at')->get();
+        if(count($textberjalan) == 0) {
             $data['textberjalan'] = 'text here';
         }
         else {
-            $data['textberjalan'] = $textberjalan->text;
+            $text = '';
+            foreach ($textberjalan as $key => $tb) {
+                $text .= $tb->text;
+                $text .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+            }
+            $data['textberjalan'] = $text;
         }
         $data['shipping'] = Shipping::first();
+        $data['producttypes'] = ProductType::get();
+
         return view('shipping', $data);
     }
 }

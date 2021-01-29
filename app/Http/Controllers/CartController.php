@@ -11,6 +11,7 @@ use App\UserShop;
 use App\Subscriber;
 use App\TextBerjalan;
 use App\TempCart;
+use App\ProductType;
 
 class CartController extends Controller
 {
@@ -34,6 +35,7 @@ class CartController extends Controller
                 }
                 $data['textberjalan'] = $text;
             }
+            $data['producttypes'] = ProductType::get();
             // return view('cart.index', $data);
             return view('cart.index2', $data);
         }
@@ -85,11 +87,12 @@ class CartController extends Controller
                 $tc->shipping = 0;
             }
             else {
-                $tc->shipping = 15;
-                $grandtotal += 15;
+                $tc->shipping = 10;
+                $grandtotal += 10;
             }
             $tc->grandtotal = $grandtotal;
             $tc->save();
+            $data['producttypes'] = ProductType::get();
 
             return view('cart.checkout3', $data);
         }
@@ -257,6 +260,7 @@ class CartController extends Controller
             }
             $data['textberjalan'] = $text;
         }
+        $data['producttypes'] = ProductType::get();
         return view('upload', $data);
     }
 
@@ -294,12 +298,14 @@ class CartController extends Controller
     public function received($id)
     {
         $data = Checkout::find($id);
+        $data['producttypes'] = ProductType::get();
         return view('cart.received', $data);
     }
 
     public function submitPayment($checkout_id)
     {
         $checkout = Checkout::find($checkout_id);
+        $data['producttypes'] = ProductType::get();
         return view('submitpayment', $checkout);
     }
 
@@ -431,13 +437,14 @@ class CartController extends Controller
             $tc->shipping = 0;
         }
         else {
-            $tc->shipping = 15;
-            $grandtotal += 15;
+            $tc->shipping = 10;
+            $grandtotal += 10;
         }
         $tc->grandtotal = $grandtotal;
         $tc->save();
         $data['user'] = UserShop::where('email', $request->username)->first();
         if (md5($request->password) == $data['user']->password) {
+            $data['producttypes'] = ProductType::get();
             return view('cart.checkout2', $data);
         }
         

@@ -15,11 +15,9 @@
                         <input type="checkbox" id="showDrop">
                         <label for="showDrop" class="mobile-drop"><a href="/shop">Shop</a><i class="fas fa-sort-down"></i></label>
                         <ul class="drop-menu">
-                            <li><a href="/shop?type_id=1">Shirts</a></li>
-                            <li><a href="/shop?type_id=2">Sweatshirts</a></li>
-                            <li><a href="/shop?type_id=3">Hats</a></li>
-                            <li><a href="/shop?type_id=4">Jackets</a></li>
-                            <li><a href="/shop?type_id=5">Prints</a></li>
+                            @foreach($producttypes as $type)
+                            <li><a href="/shop?type_id={{$type->id}}">{{$type->name}}</a></li>
+                            @endforeach
                         </ul>
                     </li>
                     <li><a href="/lookbook">Lookbook</a></li>
