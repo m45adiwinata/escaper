@@ -1,9 +1,15 @@
 @extends('layouts.phone')
+@section('title')
+Shop
+@endsection
 @section('content')
 @include('components.headerphone2')
 <section>
       <div class="container-lg">
          <div class="shop-wrapper">
+            <div class="shop-top">
+                <p>{{$typeselected ? $typeselected->name : 'SHOP'}}</p>
+            </div>
             <div class="row">
                 @foreach($products as $product)
                 <div class="col-6 col-md-3">

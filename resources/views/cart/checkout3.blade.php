@@ -172,7 +172,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="text-left"><b>Shipping{{$_COOKIE['currency'] == 'IDR' ? '' : ' (flate rate)'}}</b></td>
+                                <td class="text-left"><b>Shipping{{$_COOKIE['currency'] == 'IDR' ? '' : ' (flat rate)'}}</b></td>
                                 <td class="text-right">
                                     <b>
                                         @php 
@@ -482,10 +482,10 @@
             $('#submitbtn').css('display', 'block');
         });
         $('#showlogin').click(function() {
-            $('#login').css('display', 'block');
+            $('.login').css('display', 'block');
         });
         $('#showcoupon').click(function() {
-            $('#coupon').css('display', 'block');
+            $('.coupon').css('display', 'block');
         });
         $('#checkCreateAcc').change(function() {
             if(this.checked) {
